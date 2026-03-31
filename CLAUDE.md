@@ -6,6 +6,7 @@ You are working on a project that uses the Forte Advice design system. Follow th
 
 - **Tokens:** All design decisions live in `tokens.json`. Never invent colors, fonts, or spacing.
 - **CSS:** Import `@forteadvice/design-tokens/css` for CSS custom properties.
+- **shadcn/ui:** Import `@forteadvice/design-tokens/shadcn` for shadcn-compatible CSS variables.
 - **Tailwind:** Use the preset from `@forteadvice/design-tokens/tailwind`.
 - **TypeScript:** Import from `@forteadvice/design-tokens` for programmatic access.
 
@@ -41,6 +42,7 @@ tokens.json          — Source of truth (edit this to change tokens)
 scripts/build.js     — Generates dist/ from tokens.json
 scripts/validate.js  — Validates tokens + WCAG contrast
 dist/css/tokens.css  — Generated CSS custom properties
+dist/css/shadcn.css  — Generated shadcn/ui compatible theme
 dist/tailwind/preset.js — Generated Tailwind preset
 dist/ts/tokens.ts    — Generated TypeScript module
 design.md            — Visual rules and UI recipes

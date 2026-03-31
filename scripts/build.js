@@ -5,8 +5,9 @@
  *
  * Reads tokens.json and generates:
  *   1. dist/css/tokens.css     — CSS custom properties with mode switching
- *   2. dist/tailwind/preset.js — Tailwind v4 preset
- *   3. dist/ts/tokens.ts       — TypeScript token module
+ *   2. dist/css/shadcn.css     — shadcn/ui compatible CSS variables
+ *   3. dist/tailwind/preset.js — Tailwind v4 preset
+ *   4. dist/ts/tokens.ts       — TypeScript token module
  */
 
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
@@ -133,7 +134,84 @@ function buildCSS() {
 }
 
 // ---------------------------------------------------------------------------
-// 2. Tailwind Preset Generator
+// 2. shadcn/ui CSS Generator
+// ---------------------------------------------------------------------------
+
+function buildShadcnCSS() {
+  const lines = [];
+  const { modes, state } = tokens.colors;
+  const { typography } = tokens.brand;
+
+  lines.push("/* ============================================");
+  lines.push("   Forte Advice — shadcn/ui Theme (auto-generated)");
+  lines.push("   DO NOT EDIT — regenerate with: npm run build");
+  lines.push("");
+  lines.push("   Import this AFTER tokens.css in your project:");
+  lines.push("   @import '@forteadvice/design-tokens/css';");
+  lines.push("   @import '@forteadvice/design-tokens/shadcn';");
+  lines.push("   ============================================ */");
+  lines.push("");
+
+  function shadcnBlock(mode) {
+    const out = [];
+    out.push(`  --background: ${mode.surface.primary};`);
+    out.push(`  --foreground: ${mode.text.primary};`);
+    out.push(`  --card: ${mode.surface.secondary};`);
+    out.push(`  --card-foreground: ${mode.text.primary};`);
+    out.push(`  --popover: ${mode.surface.primary};`);
+    out.push(`  --popover-foreground: ${mode.text.primary};`);
+    out.push(`  --primary: ${mode.button.primary};`);
+    out.push(`  --primary-foreground: ${mode.text.inverted};`);
+    out.push(`  --secondary: ${mode.surface.secondary};`);
+    out.push(`  --secondary-foreground: ${mode.text.primary};`);
+    out.push(`  --muted: ${mode.surface.secondary};`);
+    out.push(`  --muted-foreground: ${mode.text.secondary};`);
+    out.push(`  --accent: ${mode.surface.secondary};`);
+    out.push(`  --accent-foreground: ${mode.text.primary};`);
+    out.push(`  --destructive: ${state.error};`);
+    out.push(`  --border: ${mode.stroke.subtle};`);
+    out.push(`  --input: ${mode.stroke.subtle};`);
+    out.push(`  --ring: ${mode.focus};`);
+    out.push(`  --sidebar: ${mode.surface.secondary};`);
+    out.push(`  --sidebar-foreground: ${mode.text.primary};`);
+    out.push(`  --sidebar-border: ${mode.stroke.subtle};`);
+    out.push(`  --sidebar-accent: ${mode.button.primary};`);
+    out.push(`  --sidebar-accent-foreground: ${mode.text.inverted};`);
+    out.push(`  --sidebar-ring: ${mode.focus};`);
+    out.push(`  --radius: 0.625rem;`);
+    return out.join("\n");
+  }
+
+  // Default: cream-plum (light)
+  lines.push("@layer base {");
+  lines.push("  :root {");
+  lines.push(shadcnBlock(modes["cream-plum"]));
+  lines.push("  }");
+  lines.push("");
+
+  // Dark: plum-cream
+  lines.push("  @media (prefers-color-scheme: dark) {");
+  lines.push("    :root {");
+  lines.push(shadcnBlock(modes["plum-cream"]).replace(/^  /gm, "      "));
+  lines.push("    }");
+  lines.push("  }");
+  lines.push("");
+
+  // Manual mode overrides
+  for (const [key, mode] of Object.entries(modes)) {
+    lines.push(`  [data-theme="${key}"] {`);
+    lines.push(shadcnBlock(mode));
+    lines.push("  }");
+    lines.push("");
+  }
+
+  lines.push("}");
+
+  write("dist/css/shadcn.css", lines.join("\n"));
+}
+
+// ---------------------------------------------------------------------------
+// 3. Tailwind Preset Generator
 // ---------------------------------------------------------------------------
 
 function buildTailwindPreset() {
@@ -247,6 +325,7 @@ function buildTypeScript() {
 
 console.log("Building Forte Advice design tokens...\n");
 buildCSS();
+buildShadcnCSS();
 buildTailwindPreset();
 buildTypeScript();
 console.log("\nDone!");

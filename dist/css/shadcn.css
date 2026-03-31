@@ -1,0 +1,209 @@
+/* ============================================
+   Forte Advice — shadcn/ui Theme (auto-generated)
+   DO NOT EDIT — regenerate with: npm run build
+
+   Import this AFTER tokens.css in your project:
+   @import '@forteadvice/design-tokens/css';
+   @import '@forteadvice/design-tokens/shadcn';
+   ============================================ */
+
+@layer base {
+  :root {
+  --background: #F2F0E7;
+  --foreground: #221C38;
+  --card: #ECE8DA;
+  --card-foreground: #221C38;
+  --popover: #F2F0E7;
+  --popover-foreground: #221C38;
+  --primary: #39344B;
+  --primary-foreground: #F2F0E7;
+  --secondary: #ECE8DA;
+  --secondary-foreground: #221C38;
+  --muted: #ECE8DA;
+  --muted-foreground: #82694C;
+  --accent: #ECE8DA;
+  --accent-foreground: #221C38;
+  --destructive: #9D140F;
+  --border: #D4CDB3;
+  --input: #D4CDB3;
+  --ring: #7269A7;
+  --sidebar: #ECE8DA;
+  --sidebar-foreground: #221C38;
+  --sidebar-border: #D4CDB3;
+  --sidebar-accent: #39344B;
+  --sidebar-accent-foreground: #F2F0E7;
+  --sidebar-ring: #7269A7;
+  --radius: 0.625rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --background: #221C38;
+      --foreground: #F2F0E7;
+      --card: #39344B;
+      --card-foreground: #F2F0E7;
+      --popover: #221C38;
+      --popover-foreground: #F2F0E7;
+      --primary: #ECE8DA;
+      --primary-foreground: #221C38;
+      --secondary: #39344B;
+      --secondary-foreground: #F2F0E7;
+      --muted: #39344B;
+      --muted-foreground: #9595C5;
+      --accent: #39344B;
+      --accent-foreground: #F2F0E7;
+      --destructive: #9D140F;
+      --border: #39344B;
+      --input: #39344B;
+      --ring: #7269A7;
+      --sidebar: #39344B;
+      --sidebar-foreground: #F2F0E7;
+      --sidebar-border: #39344B;
+      --sidebar-accent: #ECE8DA;
+      --sidebar-accent-foreground: #221C38;
+      --sidebar-ring: #7269A7;
+      --radius: 0.625rem;
+    }
+  }
+
+  [data-theme="cream-plum"] {
+  --background: #F2F0E7;
+  --foreground: #221C38;
+  --card: #ECE8DA;
+  --card-foreground: #221C38;
+  --popover: #F2F0E7;
+  --popover-foreground: #221C38;
+  --primary: #39344B;
+  --primary-foreground: #F2F0E7;
+  --secondary: #ECE8DA;
+  --secondary-foreground: #221C38;
+  --muted: #ECE8DA;
+  --muted-foreground: #82694C;
+  --accent: #ECE8DA;
+  --accent-foreground: #221C38;
+  --destructive: #9D140F;
+  --border: #D4CDB3;
+  --input: #D4CDB3;
+  --ring: #7269A7;
+  --sidebar: #ECE8DA;
+  --sidebar-foreground: #221C38;
+  --sidebar-border: #D4CDB3;
+  --sidebar-accent: #39344B;
+  --sidebar-accent-foreground: #F2F0E7;
+  --sidebar-ring: #7269A7;
+  --radius: 0.625rem;
+  }
+
+  [data-theme="plum-cream"] {
+  --background: #221C38;
+  --foreground: #F2F0E7;
+  --card: #39344B;
+  --card-foreground: #F2F0E7;
+  --popover: #221C38;
+  --popover-foreground: #F2F0E7;
+  --primary: #ECE8DA;
+  --primary-foreground: #221C38;
+  --secondary: #39344B;
+  --secondary-foreground: #F2F0E7;
+  --muted: #39344B;
+  --muted-foreground: #9595C5;
+  --accent: #39344B;
+  --accent-foreground: #F2F0E7;
+  --destructive: #9D140F;
+  --border: #39344B;
+  --input: #39344B;
+  --ring: #7269A7;
+  --sidebar: #39344B;
+  --sidebar-foreground: #F2F0E7;
+  --sidebar-border: #39344B;
+  --sidebar-accent: #ECE8DA;
+  --sidebar-accent-foreground: #221C38;
+  --sidebar-ring: #7269A7;
+  --radius: 0.625rem;
+  }
+
+  [data-theme="cream-burgendy"] {
+  --background: #F2F0E7;
+  --foreground: #3D0E18;
+  --card: #ECE8DA;
+  --card-foreground: #3D0E18;
+  --popover: #F2F0E7;
+  --popover-foreground: #3D0E18;
+  --primary: #511E29;
+  --primary-foreground: #F2F0E7;
+  --secondary: #ECE8DA;
+  --secondary-foreground: #3D0E18;
+  --muted: #ECE8DA;
+  --muted-foreground: #82694C;
+  --accent: #ECE8DA;
+  --accent-foreground: #3D0E18;
+  --destructive: #9D140F;
+  --border: #D4CDB3;
+  --input: #D4CDB3;
+  --ring: #FF6A3D;
+  --sidebar: #ECE8DA;
+  --sidebar-foreground: #3D0E18;
+  --sidebar-border: #D4CDB3;
+  --sidebar-accent: #511E29;
+  --sidebar-accent-foreground: #F2F0E7;
+  --sidebar-ring: #FF6A3D;
+  --radius: 0.625rem;
+  }
+
+  [data-theme="burgendy-cream"] {
+  --background: #3D0E18;
+  --foreground: #FF6A3D;
+  --card: #511E29;
+  --card-foreground: #FF6A3D;
+  --popover: #3D0E18;
+  --popover-foreground: #FF6A3D;
+  --primary: #F2F0E7;
+  --primary-foreground: #3D0E18;
+  --secondary: #511E29;
+  --secondary-foreground: #FF6A3D;
+  --muted: #511E29;
+  --muted-foreground: #E7BACA;
+  --accent: #511E29;
+  --accent-foreground: #FF6A3D;
+  --destructive: #9D140F;
+  --border: #511E29;
+  --input: #511E29;
+  --ring: #FF6A3D;
+  --sidebar: #511E29;
+  --sidebar-foreground: #FF6A3D;
+  --sidebar-border: #511E29;
+  --sidebar-accent: #F2F0E7;
+  --sidebar-accent-foreground: #3D0E18;
+  --sidebar-ring: #FF6A3D;
+  --radius: 0.625rem;
+  }
+
+  [data-theme="grey"] {
+  --background: #D6DDDC;
+  --foreground: #3D0E18;
+  --card: #BBC6C5;
+  --card-foreground: #3D0E18;
+  --popover: #D6DDDC;
+  --popover-foreground: #3D0E18;
+  --primary: #511E29;
+  --primary-foreground: #F2F0E7;
+  --secondary: #BBC6C5;
+  --secondary-foreground: #3D0E18;
+  --muted: #BBC6C5;
+  --muted-foreground: #983E53;
+  --accent: #BBC6C5;
+  --accent-foreground: #3D0E18;
+  --destructive: #9D140F;
+  --border: #919F9D;
+  --input: #919F9D;
+  --ring: #FF6A3D;
+  --sidebar: #BBC6C5;
+  --sidebar-foreground: #3D0E18;
+  --sidebar-border: #919F9D;
+  --sidebar-accent: #511E29;
+  --sidebar-accent-foreground: #F2F0E7;
+  --sidebar-ring: #FF6A3D;
+  --radius: 0.625rem;
+  }
+
+}

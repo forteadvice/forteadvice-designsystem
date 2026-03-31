@@ -6,6 +6,7 @@
   "exports": {
     ".": "./dist/ts/tokens.ts",
     "./css": "./dist/css/tokens.css",
+    "./shadcn": "./dist/css/shadcn.css",
     "./tailwind": "./dist/tailwind/preset.js"
   },
   "scripts": {

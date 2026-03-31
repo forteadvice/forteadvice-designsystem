@@ -37,6 +37,18 @@ export default {
 @import '@forteadvice/design-tokens/css';
 ```
 
+### shadcn/ui Integration
+
+If using shadcn/ui, import the shadcn theme file instead of (or in addition to) the base CSS. This maps Forte Advice tokens to shadcn's expected variable names (`--background`, `--foreground`, `--primary`, etc.):
+
+```css
+/* globals.css */
+@import '@forteadvice/design-tokens/css';
+@import '@forteadvice/design-tokens/shadcn';
+```
+
+All shadcn components will automatically use Forte Advice colors, including dark mode and all 5 themes.
+
 ### TypeScript
 
 ```ts
@@ -124,6 +136,7 @@ npm run build
 tokens.json              ← Edit this
     │
     ├─► dist/css/tokens.css        (CSS custom properties)
+    ├─► dist/css/shadcn.css        (shadcn/ui theme)
     ├─► dist/tailwind/preset.js    (Tailwind preset)
     └─► dist/ts/tokens.ts          (TypeScript module)
 ```
