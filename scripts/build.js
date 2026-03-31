@@ -174,10 +174,17 @@ function buildShadcnCSS() {
     out.push(`  --ring: ${mode.focus};`);
     out.push(`  --sidebar: ${mode.surface.secondary};`);
     out.push(`  --sidebar-foreground: ${mode.text.primary};`);
+    out.push(`  --sidebar-primary: ${mode.button.primary};`);
+    out.push(`  --sidebar-primary-foreground: ${mode.text.inverted};`);
     out.push(`  --sidebar-border: ${mode.stroke.subtle};`);
-    out.push(`  --sidebar-accent: ${mode.button.primary};`);
-    out.push(`  --sidebar-accent-foreground: ${mode.text.inverted};`);
+    out.push(`  --sidebar-accent: ${mode.surface.secondary};`);
+    out.push(`  --sidebar-accent-foreground: ${mode.text.primary};`);
     out.push(`  --sidebar-ring: ${mode.focus};`);
+    out.push(`  --chart-1: ${mode.button.primary};`);
+    out.push(`  --chart-2: ${mode.text.secondary};`);
+    out.push(`  --chart-3: ${mode.stroke.subtle};`);
+    out.push(`  --chart-4: ${state.success};`);
+    out.push(`  --chart-5: ${state.warning};`);
     out.push(`  --radius: 0.625rem;`);
     return out.join("\n");
   }
