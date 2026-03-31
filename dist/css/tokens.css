@@ -1,0 +1,176 @@
+/* ============================================
+   Forte Advice Design Tokens (auto-generated)
+   DO NOT EDIT — regenerate with: npm run build
+   ============================================ */
+
+:root {
+  /* Brand primitives */
+  --color-dark-plum: #221C38;
+  --color-plum: #39344B;
+  --color-habour-mist: #BBC6C5;
+  --color-ash-grey: #D6DDDC;
+  --color-cream: #F2F0E7;
+  --color-cookie-dough: #EDE6C3;
+  --color-burgendy: #511E29;
+  --color-dark-burgendy: #3D0E18;
+  --color-highlight: #FF6A3D;
+  --color-white: #FFFFFF;
+
+  /* Tone scales */
+  --color-harbour-mist-50: #F7F8F8;
+  --color-harbour-mist-100: #EEF0F0;
+  --color-harbour-mist-200: #D9DEDE;
+  --color-harbour-mist-300: #BBC6C5;
+  --color-harbour-mist-400: #919F9D;
+  --color-harbour-mist-500: #738482;
+  --color-harbour-mist-600: #5D6C6A;
+  --color-harbour-mist-700: #4C5857;
+  --color-harbour-mist-800: #414B4B;
+  --color-harbour-mist-900: #394141;
+  --color-harbour-mist-950: #262B2B;
+  --color-cream-50: #ECE8DA;
+  --color-cream-100: #E0DBC8;
+  --color-cream-200: #D4CDB3;
+  --color-cream-300: #CDC3A4;
+  --color-cream-400: #B8A77F;
+  --color-cream-500: #A99266;
+  --color-cream-600: #9C815A;
+  --color-cream-700: #82694C;
+  --color-cream-800: #6A5642;
+  --color-cream-900: #574737;
+  --color-cream-950: #2E241C;
+  --color-plum-50: #F4F4FA;
+  --color-plum-100: #E7E7F2;
+  --color-plum-200: #D4D4E9;
+  --color-plum-300: #B7B8D9;
+  --color-plum-400: #9595C5;
+  --color-plum-500: #7F7BB6;
+  --color-plum-600: #7269A7;
+  --color-plum-700: #685D98;
+  --color-plum-800: #594F7E;
+  --color-plum-900: #494365;
+  --color-plum-950: #39344B;
+  --color-burgendy-50: #FBF4F7;
+  --color-burgendy-100: #F7ECF0;
+  --color-burgendy-200: #F1D9E3;
+  --color-burgendy-300: #E7BACA;
+  --color-burgendy-400: #D78FA8;
+  --color-burgendy-500: #C76D89;
+  --color-burgendy-600: #B2506A;
+  --color-burgendy-700: #983E53;
+  --color-burgendy-800: #7F3546;
+  --color-burgendy-900: #6B303D;
+  --color-burgendy-950: #511E29;
+
+  /* State colors */
+  --color-error: #9D140F;
+  --color-warning: #CBAE54;
+  --color-success: #518579;
+  --color-focus: #FF6A3D;
+
+  /* Typography */
+  --font-sans: 'Geist', system-ui, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
+}
+
+/* === Default: Cream / Plum (light) === */
+:root, [data-theme="cream-plum"] {
+  --surface-primary: #F2F0E7;
+  --surface-secondary: #ECE8DA;
+  --surface-opaque: rgba(242,240,231,0.6);
+  --text-primary: #221C38;
+  --text-secondary: #82694C;
+  --text-inverted: #F2F0E7;
+  --text-disabled: #B8A77F;
+  --button-primary: #39344B;
+  --button-primary-hover: #221C38;
+  --button-disabled: #D4CDB3;
+  --stroke-harsh: #221C38;
+  --stroke-subtle: #D4CDB3;
+  --focus: #7269A7;
+}
+
+/* === Dark: Plum / Cream (auto + manual) === */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surface-primary: #221C38;
+    --surface-secondary: #39344B;
+    --surface-opaque: rgba(34,28,56,0.6);
+    --text-primary: #F2F0E7;
+    --text-secondary: #9595C5;
+    --text-inverted: #221C38;
+    --text-disabled: #7269A7;
+    --button-primary: #ECE8DA;
+    --button-primary-hover: #D4CDB3;
+    --button-disabled: #39344B;
+    --stroke-harsh: #F2F0E7;
+    --stroke-subtle: #39344B;
+    --focus: #7269A7;
+  }
+}
+[data-theme="plum-cream"] {
+  --surface-primary: #221C38;
+  --surface-secondary: #39344B;
+  --surface-opaque: rgba(34,28,56,0.6);
+  --text-primary: #F2F0E7;
+  --text-secondary: #9595C5;
+  --text-inverted: #221C38;
+  --text-disabled: #7269A7;
+  --button-primary: #ECE8DA;
+  --button-primary-hover: #D4CDB3;
+  --button-disabled: #39344B;
+  --stroke-harsh: #F2F0E7;
+  --stroke-subtle: #39344B;
+  --focus: #7269A7;
+}
+
+/* === Cream / Burgendy === */
+[data-theme="cream-burgendy"] {
+  --surface-primary: #F2F0E7;
+  --surface-secondary: #ECE8DA;
+  --surface-opaque: rgba(242,240,231,0.6);
+  --text-primary: #3D0E18;
+  --text-secondary: #82694C;
+  --text-inverted: #F2F0E7;
+  --text-disabled: #B8A77F;
+  --button-primary: #511E29;
+  --button-primary-hover: #3D0E18;
+  --button-disabled: #D4CDB3;
+  --stroke-harsh: #3D0E18;
+  --stroke-subtle: #D4CDB3;
+  --focus: #FF6A3D;
+}
+
+/* === Burgendy / Cream === */
+[data-theme="burgendy-cream"] {
+  --surface-primary: #3D0E18;
+  --surface-secondary: #511E29;
+  --surface-opaque: rgba(61,14,24,0.6);
+  --text-primary: #FF6A3D;
+  --text-secondary: #E7BACA;
+  --text-inverted: #3D0E18;
+  --text-disabled: #983E53;
+  --button-primary: #F2F0E7;
+  --button-primary-hover: #D4CDB3;
+  --button-disabled: #511E29;
+  --stroke-harsh: #FF6A3D;
+  --stroke-subtle: #511E29;
+  --focus: #FF6A3D;
+}
+
+/* === Grey === */
+[data-theme="grey"] {
+  --surface-primary: #D6DDDC;
+  --surface-secondary: #BBC6C5;
+  --surface-opaque: rgba(214,221,220,0.6);
+  --text-primary: #3D0E18;
+  --text-secondary: #983E53;
+  --text-inverted: #F2F0E7;
+  --text-disabled: #738482;
+  --button-primary: #511E29;
+  --button-primary-hover: #3D0E18;
+  --button-disabled: #919F9D;
+  --stroke-harsh: #511E29;
+  --stroke-subtle: #919F9D;
+  --focus: #FF6A3D;
+}

@@ -1,0 +1,26 @@
+{
+  "name": "@forteadvice/design-tokens",
+  "version": "0.1.0",
+  "description": "Shared design tokens for all Forte Advice products",
+  "type": "module",
+  "exports": {
+    ".": "./dist/ts/tokens.ts",
+    "./css": "./dist/css/tokens.css",
+    "./tailwind": "./dist/tailwind/preset.js"
+  },
+  "scripts": {
+    "build": "node scripts/build.js",
+    "validate": "node scripts/validate.js",
+    "prebuild": "node scripts/validate.js"
+  },
+  "files": [
+    "dist",
+    "tokens.json",
+    "assets"
+  ],
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/forteadvice/designsystem.git"
+  }
+}
