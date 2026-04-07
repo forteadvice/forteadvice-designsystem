@@ -19,7 +19,7 @@
     "tokens.json",
     "assets"
   ],
-  "license": "UNLICENSED",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/forteadvice/designsystem.git"
