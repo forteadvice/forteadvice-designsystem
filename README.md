@@ -49,6 +49,12 @@ If using shadcn/ui, import the shadcn theme file instead of (or in addition to) 
 
 All shadcn components will automatically use Forte Advice colors, including dark mode and all 5 themes.
 
+We also recommend installing the [shadcn/ui AI skill](https://ui.shadcn.com/docs/skills) so your AI assistant knows both the component library and the Forte Advice brand:
+
+```bash
+pnpm dlx skills add shadcn/ui
+```
+
 ### TypeScript
 
 ```ts
