@@ -59,29 +59,103 @@ Additional modes for specific sections or campaigns:
 - **Color:** `text-primary` by default, `text-secondary` for muted, Highlight for emphasis
 - **Don't:** Mix icon libraries. Use duotone for decorative only, never for core UI.
 
+## Buttons
+
+Forte Advice buttons are **pill-shaped** (fully rounded). All buttons support an optional trailing icon (14px Phosphor icon).
+
+### Button Variants
+
+| Variant | Fill | Text | Border | Shape |
+|---------|------|------|--------|-------|
+| **Primary** | `button-primary` | `text-inverted` | none | Pill (rounded-full) |
+| **Secondary** | transparent | `text-primary` | `button-primary` | Pill (rounded-full) |
+| **Text Only** | transparent | `text-primary` | none (underline) | No rounding |
+
+### Button States
+
+| State | Primary | Secondary | Text Only |
+|-------|---------|-----------|-----------|
+| **Default** | Filled | Outlined | Underlined text |
+| **Hover** | `button-primary-hover` fill | `button-primary-hover` fill + `text-inverted` | No underline change |
+| **Focused** | Focus ring (`--focus`) | Focus ring (`--focus`) | Focus ring (`--focus`) |
+| **Pressed** | Same as hover | Same as hover | Same as hover |
+| **Disabled** | `button-disabled` fill, `text-disabled` | `button-disabled` border, `text-disabled` | `text-disabled`, no underline |
+
+### Button Anatomy
+
+- **Height:** 44px (all variants)
+- **Padding:** Primary uses internal padding, Secondary/Text Only use `padding: 0`
+- **Border radius:** `rounded-full` (9999px) for Primary and Secondary. None for Text Only.
+- **Icon:** Optional, 14x14px, positioned after label with gap
+- **Gap:** Primary -2px (tight), Secondary 16px, Text Only 8px
+- **Animation:** Hover transitions use ease-out 300ms
+
 ## UI Recipes
 
 ### Primary Button
 ```html
-<button class="bg-button-primary hover:bg-button-primary-hover text-text-inverted
-  px-5 py-2.5 rounded-lg font-semibold transition-colors">
-  Button Label
+<button class="inline-flex items-center justify-center gap-2 h-11
+  bg-button-primary hover:bg-button-primary-hover text-text-inverted
+  px-6 rounded-full font-semibold transition-colors duration-300 ease-out
+  focus:outline-none focus:ring-2 focus:ring-focus focus:ring-offset-2">
+  Label
+</button>
+```
+
+### Primary Button with Icon
+```html
+<button class="inline-flex items-center justify-center gap-2 h-11
+  bg-button-primary hover:bg-button-primary-hover text-text-inverted
+  px-6 rounded-full font-semibold transition-colors duration-300 ease-out
+  focus:outline-none focus:ring-2 focus:ring-focus focus:ring-offset-2">
+  Label
+  <ArrowRight size={14} />
 </button>
 ```
 
 ### Secondary Button (outline)
 ```html
-<button class="bg-transparent border border-stroke-harsh text-text-primary
-  px-5 py-2.5 rounded-lg font-semibold hover:bg-surface-secondary transition-colors">
-  Button Label
+<button class="inline-flex items-center justify-center gap-4 h-11
+  bg-transparent border border-button-primary text-text-primary
+  px-6 rounded-full font-semibold transition-colors duration-300 ease-out
+  hover:bg-button-primary-hover hover:text-text-inverted
+  focus:outline-none focus:ring-2 focus:ring-focus focus:ring-offset-2">
+  Label
 </button>
 ```
 
-### Disabled Button
+### Text Only Button
 ```html
-<button class="bg-button-disabled text-text-disabled
-  px-5 py-2.5 rounded-lg font-semibold cursor-not-allowed" disabled>
-  Button Label
+<button class="inline-flex items-center justify-center gap-2
+  bg-transparent text-text-primary underline
+  font-semibold transition-colors duration-300 ease-out
+  hover:text-text-secondary
+  focus:outline-none focus:ring-2 focus:ring-focus">
+  Label
+</button>
+```
+
+### Disabled Buttons
+```html
+<!-- Primary disabled -->
+<button class="inline-flex items-center justify-center gap-2 h-11
+  bg-button-disabled text-text-disabled
+  px-6 rounded-full font-semibold cursor-not-allowed" disabled>
+  Label
+</button>
+
+<!-- Secondary disabled -->
+<button class="inline-flex items-center justify-center gap-4 h-11
+  bg-transparent border border-button-disabled text-text-disabled
+  px-6 rounded-full font-semibold cursor-not-allowed" disabled>
+  Label
+</button>
+
+<!-- Text Only disabled -->
+<button class="inline-flex items-center justify-center gap-2
+  bg-transparent text-text-disabled
+  font-semibold cursor-not-allowed" disabled>
+  Label
 </button>
 ```
 

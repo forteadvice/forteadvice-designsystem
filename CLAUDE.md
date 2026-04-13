@@ -35,6 +35,21 @@ You are working on a project that uses the Forte Advice design system. Follow th
 | Stroke subtle | `--stroke-subtle` | `border-stroke-subtle` | Subtle borders/dividers |
 | Focus | `--focus` | `ring-focus` | Focus ring color |
 
+## Buttons
+
+Forte Advice buttons are **pill-shaped** (`rounded-full`). Three variants:
+
+| Variant | Classes |
+|---------|---------|
+| **Primary** | `inline-flex items-center justify-center h-11 px-6 rounded-full bg-button-primary hover:bg-button-primary-hover text-text-inverted font-semibold transition-colors duration-300` |
+| **Secondary** | `inline-flex items-center justify-center h-11 px-6 rounded-full border border-button-primary bg-transparent text-text-primary hover:bg-button-primary-hover hover:text-text-inverted font-semibold transition-colors duration-300` |
+| **Text Only** | `inline-flex items-center justify-center bg-transparent text-text-primary underline font-semibold transition-colors duration-300` |
+
+- Optional trailing icon: 14px Phosphor icon with `gap-2`
+- Disabled: use `bg-button-disabled text-text-disabled cursor-not-allowed`
+- Focus: `focus:ring-2 focus:ring-focus focus:ring-offset-2`
+- **Never use `rounded-lg` on buttons** — always `rounded-full` (pill shape)
+
 ## File Structure
 
 ```
