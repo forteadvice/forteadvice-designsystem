@@ -197,12 +197,6 @@
       align-items: center;
       text-decoration: none;
     }
-    .btn-with-icon .btn {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-      padding-right: 1.25rem;
-      margin-right: -1px;
-    }
     .btn-with-icon .icon-wrapper {
       display: flex;
       align-items: center;
@@ -212,6 +206,9 @@
       border-radius: 9999px;
       transition: all 0.3s ease-out;
       flex-shrink: 0;
+      margin-left: -0.75rem;
+      position: relative;
+      z-index: 1;
     }
     .btn-with-icon .icon-wrapper svg {
       width: 14px;
@@ -230,7 +227,6 @@
       background: transparent;
       border: 1px solid var(--button-primary);
       color: var(--text-primary);
-      margin-left: -1px;
     }
     .btn-with-icon:hover .btn-secondary {
       background: var(--button-primary-hover);
