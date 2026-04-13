@@ -86,8 +86,11 @@ Forte Advice buttons are **pill-shaped** (fully rounded). All buttons support an
 - **Height:** 44px (all variants)
 - **Padding:** Primary uses internal padding, Secondary/Text Only use `padding: 0`
 - **Border radius:** `rounded-full` (9999px) for Primary and Secondary. None for Text Only.
-- **Icon:** Optional, 14x14px, positioned after label with gap
-- **Gap:** Primary -2px (tight), Secondary 16px, Text Only 8px
+- **Icon wrapper:** 44x44px circle (`rounded-full`), same background as button. Sits adjacent to the label pill — the label's right side loses its rounding (`rounded-r-none`) so the pill and circle form a compound shape.
+- **Icon size:** 14x14px (Phosphor, weight: regular)
+- **Icon color:** `text-inverted` (matches button text)
+- **Gap:** Label pill and icon circle are flush (no gap between them)
+- **Text Only with icon:** No circle wrapper — icon sits inline with 8px gap
 - **Animation:** Hover transitions use ease-out 300ms
 
 ## UI Recipes
@@ -103,14 +106,41 @@ Forte Advice buttons are **pill-shaped** (fully rounded). All buttons support an
 ```
 
 ### Primary Button with Icon
+The icon sits in a separate 44px circular wrapper adjacent to the label pill, creating a compound pill+circle shape.
+
 ```html
-<button class="inline-flex items-center justify-center gap-2 h-11
-  bg-button-primary hover:bg-button-primary-hover text-text-inverted
-  px-6 rounded-full font-semibold transition-colors duration-300 ease-out
-  focus:outline-none focus:ring-2 focus:ring-focus focus:ring-offset-2">
-  Label
-  <ArrowRight size={14} />
-</button>
+<div class="inline-flex items-center">
+  <button class="inline-flex items-center justify-center h-11
+    bg-button-primary hover:bg-button-primary-hover text-text-inverted
+    pl-6 pr-5 rounded-full rounded-r-none font-semibold transition-colors duration-300 ease-out
+    focus:outline-none focus:ring-2 focus:ring-focus focus:ring-offset-2">
+    Label
+  </button>
+  <span class="flex items-center justify-center w-11 h-11 rounded-full
+    bg-button-primary hover:bg-button-primary-hover text-text-inverted
+    transition-colors duration-300 ease-out">
+    <ArrowRight size={14} />
+  </span>
+</div>
+```
+
+### Secondary Button with Icon
+```html
+<div class="inline-flex items-center">
+  <button class="inline-flex items-center justify-center h-11
+    bg-transparent border border-button-primary text-text-primary
+    pl-6 pr-5 rounded-full rounded-r-none font-semibold transition-colors duration-300 ease-out
+    hover:bg-button-primary-hover hover:text-text-inverted
+    focus:outline-none focus:ring-2 focus:ring-focus focus:ring-offset-2">
+    Label
+  </button>
+  <span class="flex items-center justify-center w-11 h-11 rounded-full
+    border border-button-primary text-text-primary
+    hover:bg-button-primary-hover hover:text-text-inverted
+    transition-colors duration-300 ease-out">
+    <ArrowRight size={14} />
+  </span>
+</div>
 ```
 
 ### Secondary Button (outline)

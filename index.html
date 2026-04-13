@@ -190,6 +190,74 @@
       border-radius: 0;
       cursor: not-allowed;
     }
+
+    /* Button with icon: compound pill + circle */
+    .btn-with-icon {
+      display: inline-flex;
+      align-items: center;
+      text-decoration: none;
+    }
+    .btn-with-icon .btn {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      padding-right: 1.25rem;
+      margin-right: -1px;
+    }
+    .btn-with-icon .icon-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 9999px;
+      transition: all 0.3s ease-out;
+      flex-shrink: 0;
+    }
+    .btn-with-icon .icon-wrapper svg {
+      width: 14px;
+      height: 14px;
+    }
+    /* Primary icon wrapper */
+    .btn-with-icon .icon-wrapper-primary {
+      background: var(--button-primary);
+      color: var(--text-inverted);
+    }
+    .btn-with-icon:hover .icon-wrapper-primary {
+      background: var(--button-primary-hover);
+    }
+    /* Secondary icon wrapper */
+    .btn-with-icon .icon-wrapper-secondary {
+      background: transparent;
+      border: 1px solid var(--button-primary);
+      color: var(--text-primary);
+      margin-left: -1px;
+    }
+    .btn-with-icon:hover .btn-secondary {
+      background: var(--button-primary-hover);
+      color: var(--text-inverted);
+    }
+    .btn-with-icon:hover .icon-wrapper-secondary {
+      background: var(--button-primary-hover);
+      color: var(--text-inverted);
+      border-color: var(--button-primary-hover);
+    }
+    /* Text Only icon (no wrapper circle) */
+    .btn-with-icon-text {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn-with-icon-text .btn-text {
+      /* keep normal text button styles */
+    }
+    .btn-with-icon-text svg {
+      width: 14px;
+      height: 14px;
+      color: var(--text-primary);
+    }
+    .btn-with-icon-text:hover svg {
+      color: var(--text-secondary);
+    }
   </style>
 </head>
 <body>
@@ -236,9 +304,18 @@
   </div>
   <h3>With Icon</h3>
   <div class="button-row">
-    <button class="btn btn-primary">Primary <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 256 256"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69l-58.35-58.34a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"></path></svg></button>
-    <button class="btn btn-secondary">Secondary <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 256 256"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69l-58.35-58.34a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"></path></svg></button>
-    <button class="btn btn-text">Text Only <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 256 256"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69l-58.35-58.34a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"></path></svg></button>
+    <div class="btn-with-icon">
+      <button class="btn btn-primary">Primary</button>
+      <span class="icon-wrapper icon-wrapper-primary"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 256 256"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69l-58.35-58.34a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"></path></svg></span>
+    </div>
+    <div class="btn-with-icon">
+      <button class="btn btn-secondary">Secondary</button>
+      <span class="icon-wrapper icon-wrapper-secondary"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 256 256"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69l-58.35-58.34a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"></path></svg></span>
+    </div>
+    <div class="btn-with-icon-text">
+      <button class="btn btn-text">Text Only</button>
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 256 256"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69l-58.35-58.34a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"></path></svg>
+    </div>
   </div>
   <h3>Disabled</h3>
   <div class="button-row">

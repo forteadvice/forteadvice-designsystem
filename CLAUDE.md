@@ -45,7 +45,7 @@ Forte Advice buttons are **pill-shaped** (`rounded-full`). Three variants:
 | **Secondary** | `inline-flex items-center justify-center h-11 px-6 rounded-full border border-button-primary bg-transparent text-text-primary hover:bg-button-primary-hover hover:text-text-inverted font-semibold transition-colors duration-300` |
 | **Text Only** | `inline-flex items-center justify-center bg-transparent text-text-primary underline font-semibold transition-colors duration-300` |
 
-- Optional trailing icon: 14px Phosphor icon with `gap-2`
+- **Icon buttons** use a compound pill+circle shape: the label sits in a pill (with `rounded-r-none` on the right), and the icon sits in a separate 44x44px circle (`w-11 h-11 rounded-full`) with the same background color, placed flush next to the pill. Icon is 14px Phosphor. Text Only variant uses inline icon with `gap-2` instead of a circle wrapper.
 - Disabled: use `bg-button-disabled text-text-disabled cursor-not-allowed`
 - Focus: `focus:ring-2 focus:ring-focus focus:ring-offset-2`
 - **Never use `rounded-lg` on buttons** — always `rounded-full` (pill shape)
