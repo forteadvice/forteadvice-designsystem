@@ -1,5 +1,7 @@
 # Forte Advice Design System
 
+[![Co-created with AI](https://madebyhuman.iamjarl.com/badges/co-created-white.svg)](https://madebyhuman.iamjarl.com)
+
 Shared design system for all Forte Advice products (apps + web).
 
 This repository is the single source of truth for colors, typography, spacing and icon usage across all Forte Advice projects. It is designed to work equally well for humans (design overview) and AI tools like Cursor or Claude Code (deterministic tokens + rules).
