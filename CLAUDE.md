@@ -15,7 +15,7 @@ You are working on a project that uses the Forte Advice design system. Follow th
 1. **Always use semantic tokens** — write `bg-surface-primary` not `bg-[#F2F0E7]`. Never hardcode hex values.
 2. **Support all color modes** — components must work across all 5 modes. Use CSS custom properties, not static colors.
 3. **Default modes:** Light = Cream/Plum, Dark = Plum/Cream. Unless told otherwise, implement for these two.
-4. **Font:** Geist (sans) and Geist Mono (mono). Load from Google Fonts. Never substitute.
+4. **Font:** Geist (sans) and Geist Mono (mono) for all web/digital products. Load from Google Fonts. Never substitute. **Exception:** PowerPoint templates use Aptos / Aptos Display (because Aptos ships with Microsoft 365).
 5. **Icons:** Phosphor only. Default weight: regular. Import from `@phosphor-icons/react`.
 6. **Highlight (#FF6A3D)** is accent only. Never use as a background surface.
 7. **Mode switching** uses `data-theme` attribute: `cream-plum`, `plum-cream`, `cream-burgendy`, `burgendy-cream`, `grey`.

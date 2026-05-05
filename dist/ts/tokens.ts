@@ -3,20 +3,25 @@
 
 export const meta = {
   "name": "Forte Advice Design System",
-  "version": "0.1.0",
-  "updated": "2026-03-31"
+  "version": "0.2.0",
+  "updated": "2026-05-05"
 } as const;
 
 export const typography = {
   "fontFamily": {
     "sans": "Geist",
-    "mono": "Geist Mono"
+    "mono": "Geist Mono",
+    "powerpoint": "Aptos",
+    "powerpointHeading": "Aptos Display"
   },
   "fontWeight": {
     "regular": 400,
     "medium": 500,
     "semibold": 600,
     "bold": 700
+  },
+  "notes": {
+    "powerpoint": "Aptos and Aptos Display are used in PowerPoint templates instead of Geist, since Aptos ships with Microsoft 365 and works without per-machine font installation. For all web/digital products, use Geist."
   }
 } as const;
 

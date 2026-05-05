@@ -112,6 +112,19 @@ Switch modes by setting `data-theme` on any element:
 </div>
 ```
 
+## PowerPoint Templates
+
+Two ready-to-use PowerPoint templates with the Forte Advice color theme are available in `assets/powerpoint/`:
+
+| File | Slides | Purpose |
+|------|--------|---------|
+| [forte-advice-template-01.pptx](assets/powerpoint/forte-advice-template-01.pptx) | 82 | Full template with all slide layouts |
+| [forte-advice-template-02.pptx](assets/powerpoint/forte-advice-template-02.pptx) | 74 | Alternative template variant |
+
+**Font note:** PowerPoint templates use **Aptos** (body) and **Aptos Display** (headings) instead of Geist. Aptos ships with Microsoft 365 by default, so it works on any machine without font installation. For web/digital products, continue to use Geist.
+
+Placeholder images have been stripped from the templates — replace with your own visuals when building decks.
+
 ## Documentation
 
 | File | Purpose |
@@ -120,6 +133,7 @@ Switch modes by setting `data-theme` on any element:
 | [CLAUDE.md](CLAUDE.md) | AI agent instructions |
 | [tokens.json](tokens.json) | Single source of truth for all tokens |
 | [index.html](index.html) | Visual token viewer (open in browser) |
+| [scripts/strip-pptx-media.py](scripts/strip-pptx-media.py) | Strip media from .pptx files |
 
 ## Development
 
