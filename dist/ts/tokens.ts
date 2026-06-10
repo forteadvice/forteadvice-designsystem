@@ -3,8 +3,8 @@
 
 export const meta = {
   "name": "Forte Advice Design System",
-  "version": "0.2.0",
-  "updated": "2026-05-05"
+  "version": "0.3.0",
+  "updated": "2026-06-10"
 } as const;
 
 export const typography = {
@@ -54,6 +54,7 @@ export const colors = {
     "cookieDough": "#EDE6C3",
     "burgendy": "#511E29",
     "darkBurgendy": "#3D0E18",
+    "wine": "#751B2F",
     "highlight": "#FF6A3D",
     "white": "#FFFFFF"
   },

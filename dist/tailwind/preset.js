@@ -35,6 +35,7 @@ export default {
           "cookie-dough": "#EDE6C3",
           "burgendy": "#511E29",
           "dark-burgendy": "#3D0E18",
+          "wine": "#751B2F",
           "highlight": "#FF6A3D",
           "white": "#FFFFFF"
         },

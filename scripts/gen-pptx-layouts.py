@@ -1,0 +1,116 @@
+#!/usr/bin/env python3
+"""
+Forte Advice Design System — PowerPoint Layout Appendix Generator
+
+Extracts every slide layout and its placeholders from the primary template
+and rewrites the auto-generated appendix in powerpoint.md (between the
+BEGIN/END GENERATED markers).
+
+Stdlib only — no python-pptx required.
+
+Usage:
+  python3 scripts/gen-pptx-layouts.py
+"""
+import json
+import os
+import re
+import sys
+import zipfile
+import xml.etree.ElementTree as ET
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+NS = {
+    "p": "http://schemas.openxmlformats.org/presentationml/2006/main",
+    "a": "http://schemas.openxmlformats.org/drawingml/2006/main",
+}
+
+BEGIN = "<!-- BEGIN GENERATED: layout-placeholders -->"
+END = "<!-- END GENERATED: layout-placeholders -->"
+
+
+def layout_placeholders(z, part):
+    """Return (layout_name, [(idx, type, shape_name), ...]) for one layout part."""
+    root = ET.fromstring(z.read(part))
+    csld = root.find("p:cSld", NS)
+    name = csld.get("name", "(unnamed)")
+    placeholders = []
+    for sp in csld.iter(f"{{{NS['p']}}}sp"):
+        ph = sp.find("p:nvSpPr/p:nvPr/p:ph", NS)
+        if ph is None:
+            continue
+        cnvpr = sp.find("p:nvSpPr/p:cNvPr", NS)
+        placeholders.append((
+            int(ph.get("idx", "0")),
+            ph.get("type", "body"),
+            cnvpr.get("name", ""),
+        ))
+    placeholders.sort()
+    return name, placeholders
+
+
+def extract_layouts(pptx_path):
+    """Return [(layout_name, placeholders)] in layout order."""
+    with zipfile.ZipFile(pptx_path) as z:
+        parts = sorted(
+            (n for n in z.namelist()
+             if re.fullmatch(r"ppt/slideLayouts/slideLayout\d+\.xml", n)),
+            key=lambda n: int(re.search(r"(\d+)", n).group(1)),
+        )
+        return [layout_placeholders(z, p) for p in parts]
+
+
+def main():
+    with open(os.path.join(ROOT, "tokens.json")) as f:
+        templates = json.load(f)["powerpoint"]["templates"]
+
+    extracted = [extract_layouts(os.path.join(ROOT, t)) for t in templates]
+
+    # All templates must agree on layout names + placeholders, since the
+    # appendix documents them as one shared set.
+    for t, layouts in zip(templates[1:], extracted[1:]):
+        if layouts != extracted[0]:
+            print(f"ERROR: {t} layouts/placeholders differ from {templates[0]}")
+            sys.exit(1)
+
+    lines = [BEGIN]
+    lines.append("")
+    lines.append(f"_Auto-generated from `{os.path.basename(templates[0])}` "
+                 "by `scripts/gen-pptx-layouts.py` — do not edit by hand. "
+                 "Both templates contain identical layouts._")
+    lines.append("")
+    for name, placeholders in extracted[0]:
+        lines.append(f"#### `{name}`")
+        lines.append("")
+        if not placeholders:
+            lines.append("_No placeholders (blank canvas)._")
+            lines.append("")
+            continue
+        lines.append("| idx | type | name |")
+        lines.append("|---|---|---|")
+        for idx, ph_type, shape_name in placeholders:
+            lines.append(f"| {idx} | {ph_type} | {shape_name} |")
+        lines.append("")
+    lines.append(END)
+
+    md_path = os.path.join(ROOT, "powerpoint.md")
+    with open(md_path) as f:
+        md = f.read()
+
+    if BEGIN not in md or END not in md:
+        print("ERROR: powerpoint.md is missing the GENERATED markers")
+        sys.exit(1)
+
+    pattern = re.compile(re.escape(BEGIN) + ".*?" + re.escape(END), re.S)
+    md = pattern.sub("\n".join(lines), md)
+
+    with open(md_path, "w") as f:
+        f.write(md)
+
+    total = sum(len(p) for _, p in extracted[0])
+    print(f"  ✓ powerpoint.md appendix regenerated "
+          f"({len(extracted[0])} layouts, {total} placeholders)")
+
+
+if __name__ == "__main__":
+    main()

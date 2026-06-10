@@ -6,6 +6,7 @@ on:
     paths:
       - 'tokens.json'
       - 'scripts/**'
+      - 'assets/powerpoint/**'
       - '.github/workflows/build-tokens.yml'
 
 jobs:
@@ -23,6 +24,9 @@ jobs:
 
       - name: Validate tokens
         run: node scripts/validate.js
+
+      - name: Validate PowerPoint templates
+        run: python3 scripts/validate-pptx.py
 
       - name: Build tokens
         run: node scripts/build.js

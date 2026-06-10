@@ -121,15 +121,24 @@ Two ready-to-use PowerPoint templates with the Forte Advice color theme are avai
 | [forte-advice-template-01.pptx](assets/powerpoint/forte-advice-template-01.pptx) | 82 | Full template with all slide layouts |
 | [forte-advice-template-02.pptx](assets/powerpoint/forte-advice-template-02.pptx) | 74 | Alternative template variant |
 
+Both templates share the same theme and 65 named slide layouts. See [powerpoint.md](powerpoint.md) for the full layout reference, theme color mapping and rules for building decks.
+
 **Font note:** PowerPoint templates use **Aptos** (body) and **Aptos Display** (headings) instead of Geist. Aptos ships with Microsoft 365 by default, so it works on any machine without font installation. For web/digital products, continue to use Geist.
 
 Placeholder images have been stripped from the templates — replace with your own visuals when building decks.
+
+The templates' theme colors and fonts are validated against `tokens.json` in CI:
+
+```bash
+npm run validate:pptx
+```
 
 ## Documentation
 
 | File | Purpose |
 |------|---------|
 | [design.md](design.md) | Visual rules, typography, icons, UI recipes |
+| [powerpoint.md](powerpoint.md) | PowerPoint rules, theme mapping, layout reference |
 | [CLAUDE.md](CLAUDE.md) | AI agent instructions |
 | [tokens.json](tokens.json) | Single source of truth for all tokens |
 | [index.html](index.html) | Visual token viewer (open in browser) |

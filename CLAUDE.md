@@ -50,6 +50,16 @@ Forte Advice buttons are **pill-shaped** (`rounded-full`). Three variants:
 - Focus: `focus:ring-2 focus:ring-focus focus:ring-offset-2`
 - **Never use `rounded-lg` on buttons** — always `rounded-full` (pill shape)
 
+## PowerPoint Presentations
+
+When building or editing .pptx decks, follow `powerpoint.md` precisely:
+
+1. **Always start from a template** in `assets/powerpoint/` (default: `forte-advice-template-01.pptx`). Never build from a blank file.
+2. **Select layouts by their exact names** (e.g. `TITLE: Plum`, `QUOTE: Burgundy`, `FOCUS x 3: Numbers`) — the full inventory of 65 layouts is in `powerpoint.md`. Don't recreate existing layouts with free text boxes.
+3. **Fonts:** Aptos Display (headings) / Aptos (body). Never Geist in PowerPoint.
+4. **Colors:** use theme color slots only — the slot→token mapping lives in `powerpoint.theme` in `tokens.json`. Never hardcode hex values outside that palette.
+5. After changing a template, run `npm run validate:pptx` — it verifies theme colors and fonts against tokens.json.
+
 ## File Structure
 
 ```
@@ -61,7 +71,10 @@ dist/css/shadcn.css  — Generated shadcn/ui compatible theme
 dist/tailwind/preset.js — Generated Tailwind preset
 dist/ts/tokens.ts    — Generated TypeScript module
 design.md            — Visual rules and UI recipes
+powerpoint.md        — PowerPoint rules + layout reference
+scripts/validate-pptx.py — Validates .pptx templates against tokens.json
 assets/logo/         — SVG logo files
+assets/powerpoint/   — Official .pptx templates
 ```
 
 ## When Modifying the Design System

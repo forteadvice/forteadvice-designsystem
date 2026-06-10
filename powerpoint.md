@@ -1,0 +1,927 @@
+# Forte Advice — PowerPoint Guide
+
+Rules and layout reference for building Forte Advice presentations. Written for both humans and AI tools (e.g. the Claude `pptx` skill) so decks can be built deterministically on top of the official templates.
+
+## Rules
+
+1. **Always start from a template.** Never build a deck from a blank file. Use [forte-advice-template-01.pptx](assets/powerpoint/forte-advice-template-01.pptx) (default) or [forte-advice-template-02.pptx](assets/powerpoint/forte-advice-template-02.pptx) (alternative variant). Both share the same theme and the same 65 named layouts.
+2. **Pick layouts by name.** Every layout has a descriptive name (e.g. `QUOTE: Burgundy`, `FOCUS x 3: Numbers`). Choose the layout that matches the content — don't rebuild an existing layout with free-floating text boxes.
+3. **Fonts: Aptos Display (headings) and Aptos (body).** This is the one sanctioned exception to the Geist rule, because Aptos ships with Microsoft 365 and needs no font installation. Never insert Geist or any other font in a deck.
+4. **Colors come from the theme.** Use the theme color slots — never hardcode hex values outside the palette below. The theme is validated against `tokens.json` by `scripts/validate-pptx.py`.
+5. **Highlight (#FF6A3D) is accent only** — same rule as on the web. Use it for emphasis and the dedicated `TITLE: Highlight` / `QUOTE: Highlight` layouts, never as an ad-hoc background fill.
+6. **Placeholder images are stripped** from the templates (1×1 placeholders). Replace them with real visuals when building a deck; use `scripts/strip-pptx-media.py` if you need to slim a finished deck back down.
+
+## Theme Colors
+
+The Office theme color slots map to design tokens as follows (source of truth: `powerpoint.theme` in [tokens.json](tokens.json)):
+
+| Theme slot | Hex | Token |
+|---|---|---|
+| dk1 | `#000000` | — (text/black) |
+| lt1 | `#FFFFFF` | white |
+| dk2 | `#39344B` | plum |
+| lt2 | `#D6DDDC` | ashGrey |
+| accent1 | `#FF6A3D` | highlight |
+| accent2 | `#EDE6C3` | cookieDough |
+| accent3 | `#511E29` | burgendy |
+| accent4 | `#F2F0E7` | cream |
+| accent5 | `#751B2F` | wine |
+| accent6 | `#BBC6C5` | habourMist |
+
+## Layout Reference
+
+Both templates contain the same 65 layouts. Layout names are exact — use them when selecting a layout programmatically.
+
+### Title slides (13)
+
+| Layout | Use for |
+|---|---|
+| `TITLE: Light image` | Cover with a light photo |
+| `TITLE: Dark image` | Cover with a dark photo |
+| `TITLE: Burgundy + image` | Cover, burgundy surface + photo |
+| `TITLE: Harbour Mist + image` | Cover, grey-green surface + photo |
+| `TITLE: Highlight` | Cover, highlight orange (use sparingly) |
+| `TITLE: Plum` / `TITLE: Burgundy` / `TITLE: Cream` / `TITLE: Ash grey` | Solid-color covers |
+| `TITLE: Burgundy + 5th element` / `TITLE: Plum + 5th element` / `TITLE: Cream + 5th element` / `TITLE: Ash grey + 5th element` | Covers with the "5th element" brand graphic |
+
+### Agenda & chapters (8)
+
+| Layout | Use for |
+|---|---|
+| `AGENDA: Overview` | Single-slide agenda |
+| `AGENDA: Chapters` | Agenda broken into chapters |
+| `CHAPTER: Harbour Mist` / `CHAPTER: Plum` / `CHAPTER: Burgundy` / `CHAPTER: Cream` | Chapter dividers, solid color |
+| `CHAPTER: White with intro` / `CHAPTER: Burgundy with intro` | Chapter divider + intro paragraph |
+
+### Text & content (13)
+
+| Layout | Use for |
+|---|---|
+| `TEXT: Bullets` | Standard bullet slide (white) |
+| `TEXT: Bullets Cream` / `TEXT: Bullets Burgundy` / `TEXT: Bullets Ash Grey` | Bullet slide on colored surface |
+| `TEXT: Two columns` | Two text columns |
+| `TEXT: Image right` / `TEXT: Image left` | Text + half-slide image |
+| `TEXT: Small image left` / `TEXT: Small image right` / `TEXT: Small image top` | Text + small image |
+| `TEXT: Two boxes + image` | Two content boxes + image |
+| `TEXT: Image with details` | Image with caption/details |
+| `TEXT: Graph` | Chart slide |
+
+### Breakers & quotes (7)
+
+| Layout | Use for |
+|---|---|
+| `BREAKER: Harbour Mist` / `BREAKER: Image` | Visual pause between sections |
+| `QUOTE: Harbour Mist` / `QUOTE: Plum` / `QUOTE: Burgundy` / `QUOTE: Highlight` / `QUOTE: Image` | Pull quotes on various surfaces |
+
+### Images (5)
+
+| Layout | Use for |
+|---|---|
+| `IMAGE: Full` | Full-bleed image |
+| `IMAGE: Two images` / `IMAGE: Four images` / `IMAGE: Collage` | Multi-image grids |
+| `IMAGE: 5th element` | Image framed by the brand graphic |
+
+### Focus points (13)
+
+"FOCUS" layouts present N highlighted items (numbers, KPIs, offerings):
+
+| Layout | Items |
+|---|---|
+| `FOCUS x 2: Image + text` | 2 |
+| `FOCUS x 3: Numbers` / `FOCUS x 3: Image + text` / `FOCUS x 3: With intro text` / `1_FOCUS x 3: Harbour Mist` / `FOCUS x 3: Cream` | 3 |
+| `FOCUS x 4: Images` / `FOCUS x 4: Numbers` / `FOCUS x 4: Harbour Mist` / `FOCUS x 4: Cream` | 4 |
+| `FOCUS x 5: Numbers` | 5 |
+| `FOCUS x 6: With intro text` | 6 |
+| `FOCUS x 8: Image + text` | 8 |
+
+### Team & blank (6)
+
+| Layout | Use for |
+|---|---|
+| `TEAM: 12 people` / `TEAM: 4 people` | Team overview grids |
+| `TEAM: Individual CV` | Single-person CV slide |
+| `BLANK: White` / `BLANK: Plum` / `BLANK: Burgundy` | Empty canvas on brand surface |
+
+## Validation
+
+```bash
+npm run validate:pptx   # checks template theme + fonts against tokens.json
+```
+
+Runs in CI on every push that touches `tokens.json`, `scripts/` or `assets/powerpoint/`.
+
+## Appendix: Placeholders per Layout
+
+When adding a slide, **fill the layout's placeholders — never add free-floating text boxes** on top of a layout. The tables below list every placeholder (python-pptx: `slide.placeholders[idx]`). Placeholder type `body` with no explicit type attribute appears as `body` here.
+
+Regenerate after editing the templates:
+
+```bash
+python3 scripts/gen-pptx-layouts.py
+```
+
+<!-- BEGIN GENERATED: layout-placeholders -->
+
+_Auto-generated from `forte-advice-template-01.pptx` by `scripts/gen-pptx-layouts.py` — do not edit by hand. Both templates contain identical layouts._
+
+#### `TITLE: Light image`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 13 | body | Pladsholder til tekst 11 |
+| 14 | pic | Picture Placeholder 4 |
+| 15 | pic | Pladsholder til billede 6 |
+| 16 | pic | Pladsholder til billede 6 |
+
+#### `TITLE: Dark image`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 13 | body | Pladsholder til tekst 11 |
+| 14 | pic | Picture Placeholder 4 |
+| 15 | pic | Pladsholder til billede 6 |
+| 16 | pic | Pladsholder til billede 6 |
+
+#### `TITLE: Burgundy + image`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 13 | body | Pladsholder til tekst 11 |
+| 14 | pic | Picture Placeholder 4 |
+| 16 | pic | Pladsholder til billede 6 |
+
+#### `TITLE: Harbour Mist + image`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 13 | body | Pladsholder til tekst 11 |
+| 14 | pic | Picture Placeholder 4 |
+| 15 | pic | Pladsholder til billede 6 |
+| 16 | pic | Pladsholder til billede 6 |
+
+#### `TITLE: Highlight`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 13 | body | Pladsholder til tekst 11 |
+
+#### `TITLE: Plum`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 13 | body | Pladsholder til tekst 11 |
+
+#### `TITLE: Burgundy`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 13 | body | Pladsholder til tekst 11 |
+
+#### `TITLE: Cream`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 13 | body | Pladsholder til tekst 11 |
+
+#### `TITLE: Ash grey`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 13 | body | Pladsholder til tekst 11 |
+
+#### `TITLE: Burgundy + 5th element`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 13 | body | Pladsholder til tekst 11 |
+
+#### `TITLE: Plum + 5th element`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 13 | body | Pladsholder til tekst 11 |
+
+#### `TITLE: Cream + 5th element`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 13 | body | Pladsholder til tekst 11 |
+
+#### `TITLE: Ash grey + 5th element`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 13 | body | Pladsholder til tekst 11 |
+
+#### `AGENDA: Overview`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 15 | body | Pladsholder til tekst 2 |
+
+#### `AGENDA: Chapters`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 15 | body | Pladsholder til tekst 2 |
+| 16 | body | Pladsholder til tekst 10 |
+
+#### `CHAPTER: Harbour Mist`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+
+#### `CHAPTER: Plum`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+
+#### `CHAPTER: Burgundy`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+
+#### `CHAPTER: Cream`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+
+#### `CHAPTER: White with intro`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 13 | body | Pladsholder til tekst 8 |
+
+#### `CHAPTER: Burgundy with intro`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 13 | body | Pladsholder til tekst 8 |
+
+#### `TEXT: Bullets`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 14 | body | Pladsholder til tekst 2 |
+
+#### `TEXT: Bullets Cream`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 14 | body | Pladsholder til tekst 2 |
+
+#### `TEXT: Bullets Burgundy`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 14 | body | Pladsholder til tekst 2 |
+
+#### `TEXT: Bullets Ash Grey`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 14 | body | Pladsholder til tekst 2 |
+
+#### `TEXT: Two columns`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 14 | body | Pladsholder til tekst 2 |
+| 15 | body | Pladsholder til tekst 2 |
+
+#### `TEXT: Image right`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 1 | body | Pladsholder til tekst 2 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 16 | pic | Pladsholder til billede 12 |
+
+#### `TEXT: Image left`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 1 | body | Pladsholder til tekst 2 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 16 | pic | Pladsholder til billede 12 |
+
+#### `TEXT: Graph`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 1 | body | Pladsholder til tekst 2 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+
+#### `TEXT: Small image left`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 1 | body | Pladsholder til tekst 2 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 16 | pic | Pladsholder til billede 12 |
+| 17 | body | Pladsholder til tekst 2 |
+
+#### `TEXT: Small image right`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 1 | body | Pladsholder til tekst 2 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 16 | pic | Pladsholder til billede 12 |
+| 17 | body | Pladsholder til tekst 2 |
+
+#### `TEXT: Small image top`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 1 | body | Pladsholder til tekst 2 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 16 | pic | Pladsholder til billede 12 |
+| 17 | body | Pladsholder til tekst 2 |
+
+#### `TEXT: Two boxes + image`
+
+| idx | type | name |
+|---|---|---|
+| 1 | body | Pladsholder til tekst 2 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 16 | pic | Pladsholder til billede 12 |
+| 17 | body | Pladsholder til tekst 2 |
+
+#### `TEXT: Image with details`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 16 | pic | Pladsholder til billede 12 |
+| 18 | pic | Pladsholder til billede 12 |
+| 19 | pic | Pladsholder til billede 12 |
+| 20 | pic | Pladsholder til billede 12 |
+| 21 | body | Pladsholder til tekst 19 |
+| 22 | pic | Pladsholder til billede 12 |
+
+#### `BREAKER: Harbour Mist`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+
+#### `BREAKER: Image`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 14 | pic | Picture Placeholder 4 |
+| 15 | pic | Pladsholder til billede 6 |
+| 16 | pic | Pladsholder til billede 8 |
+| 17 | pic | Pladsholder til billede 6 |
+
+#### `QUOTE: Harbour Mist`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 13 | body | Pladsholder til tekst 11 |
+
+#### `QUOTE: Plum`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 13 | body | Pladsholder til tekst 11 |
+
+#### `QUOTE: Burgundy`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 13 | body | Pladsholder til tekst 11 |
+
+#### `QUOTE: Highlight`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 13 | body | Pladsholder til tekst 11 |
+
+#### `QUOTE: Image`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 13 | body | Pladsholder til tekst 11 |
+| 14 | pic | Picture Placeholder 4 |
+| 15 | pic | Pladsholder til billede 6 |
+| 17 | pic | Pladsholder til billede 6 |
+
+#### `IMAGE: Full`
+
+| idx | type | name |
+|---|---|---|
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 16 | pic | Pladsholder til billede 12 |
+
+#### `IMAGE: Two images`
+
+| idx | type | name |
+|---|---|---|
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 16 | pic | Pladsholder til billede 12 |
+| 17 | pic | Pladsholder til billede 12 |
+
+#### `IMAGE: Four images`
+
+| idx | type | name |
+|---|---|---|
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 16 | pic | Pladsholder til billede 12 |
+| 17 | pic | Pladsholder til billede 12 |
+| 18 | pic | Pladsholder til billede 12 |
+| 19 | pic | Pladsholder til billede 12 |
+
+#### `IMAGE: Collage`
+
+| idx | type | name |
+|---|---|---|
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 16 | pic | Pladsholder til billede 12 |
+| 17 | pic | Pladsholder til billede 12 |
+| 18 | pic | Pladsholder til billede 12 |
+| 19 | pic | Pladsholder til billede 12 |
+| 20 | pic | Pladsholder til billede 12 |
+| 21 | pic | Pladsholder til billede 12 |
+| 22 | pic | Pladsholder til billede 12 |
+
+#### `IMAGE: 5th element`
+
+| idx | type | name |
+|---|---|---|
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 14 | pic | Picture Placeholder 4 |
+| 15 | pic | Pladsholder til billede 6 |
+| 17 | body | Pladsholder til tekst 17 |
+| 18 | pic | Pladsholder til billede 21 |
+| 19 | pic | Pladsholder til billede 6 |
+
+#### `FOCUS x 2: Image + text`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 14 | body | Pladsholder til tekst 2 |
+| 15 | body | Pladsholder til tekst 11 |
+| 16 | body | Pladsholder til tekst 2 |
+| 17 | body | Pladsholder til tekst 11 |
+| 19 | pic | Pladsholder til billede 6 |
+| 20 | pic | Pladsholder til billede 6 |
+
+#### `FOCUS x 3: Numbers`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 1 | body | Pladsholder til tekst 2 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 13 | body | Pladsholder til tekst 11 |
+| 14 | body | Pladsholder til tekst 2 |
+| 15 | body | Pladsholder til tekst 11 |
+| 16 | body | Pladsholder til tekst 2 |
+| 17 | body | Pladsholder til tekst 11 |
+
+#### `FOCUS x 3: Image + text`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 1 | body | Pladsholder til tekst 2 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 13 | body | Pladsholder til tekst 11 |
+| 14 | body | Pladsholder til tekst 2 |
+| 15 | body | Pladsholder til tekst 11 |
+| 16 | body | Pladsholder til tekst 2 |
+| 17 | body | Pladsholder til tekst 11 |
+| 18 | pic | Pladsholder til billede 6 |
+| 19 | pic | Pladsholder til billede 6 |
+| 20 | pic | Pladsholder til billede 6 |
+
+#### `FOCUS x 3: With intro text`
+
+| idx | type | name |
+|---|---|---|
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 17 | pic | Pladsholder til billede 12 |
+| 18 | pic | Pladsholder til billede 12 |
+| 19 | pic | Pladsholder til billede 12 |
+| 23 | body | Pladsholder til tekst 19 |
+| 24 | body | Pladsholder til tekst 19 |
+| 25 | body | Pladsholder til tekst 19 |
+| 26 | body | Pladsholder til tekst 19 |
+| 38 | body | Pladsholder til tekst 19 |
+| 43 | body | Pladsholder til tekst 19 |
+
+#### `1_FOCUS x 3: Harbour Mist`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 19 | body | Pladsholder til tekst 2 |
+| 20 | body | Pladsholder til tekst 11 |
+| 21 | body | Pladsholder til tekst 2 |
+| 22 | body | Pladsholder til tekst 11 |
+| 23 | body | Pladsholder til tekst 2 |
+| 24 | body | Pladsholder til tekst 11 |
+
+#### `FOCUS x 3: Cream`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 19 | body | Pladsholder til tekst 2 |
+| 20 | body | Pladsholder til tekst 11 |
+| 21 | body | Pladsholder til tekst 2 |
+| 22 | body | Pladsholder til tekst 11 |
+| 23 | body | Pladsholder til tekst 2 |
+| 24 | body | Pladsholder til tekst 11 |
+
+#### `FOCUS x 4: Images`
+
+| idx | type | name |
+|---|---|---|
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 16 | pic | Pladsholder til billede 12 |
+| 17 | pic | Pladsholder til billede 12 |
+| 18 | pic | Pladsholder til billede 12 |
+| 19 | pic | Pladsholder til billede 12 |
+
+#### `FOCUS x 4: Numbers`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 14 | body | Pladsholder til tekst 2 |
+| 15 | body | Pladsholder til tekst 11 |
+| 16 | body | Pladsholder til tekst 2 |
+| 17 | body | Pladsholder til tekst 11 |
+| 18 | body | Pladsholder til tekst 2 |
+| 19 | body | Pladsholder til tekst 11 |
+| 20 | body | Pladsholder til tekst 2 |
+| 21 | body | Pladsholder til tekst 11 |
+
+#### `FOCUS x 4: Harbour Mist`
+
+| idx | type | name |
+|---|---|---|
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 19 | body | Pladsholder til tekst 2 |
+| 20 | body | Pladsholder til tekst 11 |
+| 21 | body | Pladsholder til tekst 2 |
+| 22 | body | Pladsholder til tekst 11 |
+| 23 | body | Pladsholder til tekst 2 |
+| 24 | body | Pladsholder til tekst 11 |
+| 25 | body | Pladsholder til tekst 2 |
+| 26 | body | Pladsholder til tekst 11 |
+
+#### `FOCUS x 4: Cream`
+
+| idx | type | name |
+|---|---|---|
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 19 | body | Pladsholder til tekst 2 |
+| 20 | body | Pladsholder til tekst 11 |
+| 21 | body | Pladsholder til tekst 2 |
+| 22 | body | Pladsholder til tekst 11 |
+| 23 | body | Pladsholder til tekst 2 |
+| 24 | body | Pladsholder til tekst 11 |
+| 25 | body | Pladsholder til tekst 2 |
+| 26 | body | Pladsholder til tekst 11 |
+
+#### `FOCUS x 5: Numbers`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 1 | body | Pladsholder til tekst 2 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 13 | body | Pladsholder til tekst 11 |
+| 14 | body | Pladsholder til tekst 2 |
+| 15 | body | Pladsholder til tekst 11 |
+| 16 | body | Pladsholder til tekst 2 |
+| 17 | body | Pladsholder til tekst 11 |
+| 18 | body | Pladsholder til tekst 2 |
+| 19 | body | Pladsholder til tekst 11 |
+| 20 | body | Pladsholder til tekst 2 |
+| 21 | body | Pladsholder til tekst 11 |
+
+#### `FOCUS x 6: With intro text`
+
+| idx | type | name |
+|---|---|---|
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 17 | pic | Pladsholder til billede 12 |
+| 23 | body | Pladsholder til tekst 19 |
+| 24 | body | Pladsholder til tekst 19 |
+| 31 | pic | Pladsholder til billede 12 |
+| 32 | pic | Pladsholder til billede 12 |
+| 33 | body | Pladsholder til tekst 19 |
+| 34 | body | Pladsholder til tekst 19 |
+| 35 | pic | Pladsholder til billede 12 |
+| 37 | body | Pladsholder til tekst 19 |
+| 38 | body | Pladsholder til tekst 19 |
+| 39 | pic | Pladsholder til billede 12 |
+| 40 | pic | Pladsholder til billede 12 |
+| 41 | body | Pladsholder til tekst 19 |
+| 42 | body | Pladsholder til tekst 19 |
+| 43 | body | Pladsholder til tekst 19 |
+
+#### `FOCUS x 8: Image + text`
+
+| idx | type | name |
+|---|---|---|
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 16 | pic | Pladsholder til billede 12 |
+| 17 | pic | Pladsholder til billede 12 |
+| 23 | body | Pladsholder til tekst 19 |
+| 24 | body | Pladsholder til tekst 19 |
+| 31 | pic | Pladsholder til billede 12 |
+| 32 | pic | Pladsholder til billede 12 |
+| 33 | body | Pladsholder til tekst 19 |
+| 34 | body | Pladsholder til tekst 19 |
+| 35 | pic | Pladsholder til billede 12 |
+| 36 | pic | Pladsholder til billede 12 |
+| 37 | body | Pladsholder til tekst 19 |
+| 38 | body | Pladsholder til tekst 19 |
+| 39 | pic | Pladsholder til billede 12 |
+| 40 | pic | Pladsholder til billede 12 |
+| 41 | body | Pladsholder til tekst 19 |
+| 42 | body | Pladsholder til tekst 19 |
+
+#### `TEAM: 12 people`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 22 | pic | Picture Placeholder 2 |
+| 23 | body | Text Placeholder 16 |
+| 29 | pic | Picture Placeholder 2 |
+| 30 | body | Text Placeholder 16 |
+| 41 | body | Text Placeholder 16 |
+| 42 | body | Text Placeholder 16 |
+| 43 | body | Text Placeholder 16 |
+| 44 | pic | Picture Placeholder 2 |
+| 47 | body | Text Placeholder 16 |
+| 48 | pic | Picture Placeholder 2 |
+| 49 | body | Text Placeholder 16 |
+| 50 | pic | Picture Placeholder 2 |
+| 51 | body | Text Placeholder 16 |
+| 52 | pic | Picture Placeholder 2 |
+| 53 | body | Text Placeholder 16 |
+| 54 | pic | Picture Placeholder 2 |
+| 55 | body | Text Placeholder 16 |
+| 56 | pic | Picture Placeholder 2 |
+| 57 | body | Text Placeholder 16 |
+| 58 | pic | Picture Placeholder 2 |
+| 59 | body | Text Placeholder 16 |
+| 60 | pic | Picture Placeholder 2 |
+| 61 | body | Text Placeholder 16 |
+| 62 | pic | Picture Placeholder 2 |
+| 63 | body | Text Placeholder 16 |
+| 64 | pic | Picture Placeholder 2 |
+| 65 | body | Text Placeholder 16 |
+
+#### `TEAM: 4 people`
+
+| idx | type | name |
+|---|---|---|
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 16 | pic | Pladsholder til billede 12 |
+| 23 | body | Pladsholder til tekst 19 |
+| 27 | body | Pladsholder til tekst 19 |
+| 28 | pic | Pladsholder til billede 12 |
+| 29 | body | Pladsholder til tekst 19 |
+| 30 | body | Pladsholder til tekst 19 |
+| 31 | pic | Pladsholder til billede 12 |
+| 32 | body | Pladsholder til tekst 19 |
+| 33 | body | Pladsholder til tekst 19 |
+| 34 | pic | Pladsholder til billede 12 |
+| 35 | body | Pladsholder til tekst 19 |
+| 36 | body | Pladsholder til tekst 19 |
+
+#### `TEAM: Individual CV`
+
+| idx | type | name |
+|---|---|---|
+| 0 | title | Titel 1 |
+| 10 | ftr | Pladsholder til sidefod 2 |
+| 11 | sldNum | Pladsholder til slidenummer 3 |
+| 12 | dt | Pladsholder til dato 4 |
+| 17 | pic | Pladsholder til billede 12 |
+| 21 | body | Pladsholder til tekst 19 |
+| 22 | body | Pladsholder til tekst 19 |
+| 23 | body | Pladsholder til tekst 19 |
+
+#### `BLANK: White`
+
+| idx | type | name |
+|---|---|---|
+| 2 | dt | Date Placeholder 18 |
+| 3 | ftr | Pladsholder til sidefod 16 |
+| 4 | sldNum | Pladsholder til slidenummer 26 |
+
+#### `BLANK: Plum`
+
+| idx | type | name |
+|---|---|---|
+| 2 | dt | Date Placeholder 18 |
+| 3 | ftr | Pladsholder til sidefod 16 |
+| 4 | sldNum | Pladsholder til slidenummer 26 |
+
+#### `BLANK: Burgundy`
+
+| idx | type | name |
+|---|---|---|
+| 2 | dt | Date Placeholder 18 |
+| 3 | ftr | Pladsholder til sidefod 16 |
+| 4 | sldNum | Pladsholder til slidenummer 26 |
+
+<!-- END GENERATED: layout-placeholders -->
