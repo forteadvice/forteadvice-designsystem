@@ -10,7 +10,7 @@ Rules and layout reference for building Forte Advice presentations. Written for 
 4. **Fonts: Aptos Display (headings) and Aptos (body).** This is the one sanctioned exception to the Geist rule, because Aptos ships with Microsoft 365 and needs no font installation. Never insert Geist or any other font in a deck.
 5. **Colors come from the theme.** Use the theme color slots — never hardcode hex values outside the palette below. The theme is validated against `tokens.json` by `scripts/validate-pptx.py`.
 6. **Highlight (#FF6A3D) is accent only** — same rule as on the web. Use it for emphasis and the dedicated `TITLE: Highlight` / `QUOTE: Highlight` layouts, never as an ad-hoc background fill.
-7. **Placeholder images are stripped** from the templates (1×1 placeholders). Replace them with real visuals when building a deck; use `scripts/strip-pptx-media.py` if you need to slim a finished deck back down.
+7. **Example photos are stripped** from the templates (1×1 placeholders) — replace them with real visuals when building a deck. Brand graphics are intact: the `forte`/`advice` wordmarks and the "5th element" graphics live as SVGs in the masters/layouts and render automatically. `scripts/strip-pptx-media.py` never strips master/layout media.
 
 ## Theme Colors
 

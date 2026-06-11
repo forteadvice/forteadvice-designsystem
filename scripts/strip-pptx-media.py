@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 """
-Strip media from .pptx files, replacing all embedded images with tiny placeholders.
+Strip media from .pptx files, replacing embedded images with tiny placeholders.
 Preserves layout structure, theme, master slides, and image references.
+
+Media referenced from slide masters or slide layouts is NEVER stripped — those
+are brand assets (logos, the "5th element" graphics) that every deck built on
+the template needs. Only slide-level media (example photos) is replaced.
 
 Usage:
   python3 scripts/strip-pptx-media.py <input.pptx> <output.pptx>
@@ -12,6 +16,7 @@ from ~75MB to ~5MB while keeping the template structure intact.
 """
 import sys
 import os
+import re
 import zipfile
 import shutil
 import tempfile
@@ -44,6 +49,17 @@ def get_placeholder(filename: str) -> bytes:
     return b""  # unknown format: empty bytes
 
 
+def brand_media(zin: zipfile.ZipFile) -> set:
+    """Media referenced from slide masters/layouts — brand assets, never strip."""
+    protected = set()
+    for name in zin.namelist():
+        if re.match(r"ppt/slide(Masters|Layouts)/_rels/.*\.rels$", name):
+            rels = zin.read(name).decode("utf-8")
+            for m in re.finditer(r'Target="\.\./media/([^"]+)"', rels):
+                protected.add(f"ppt/media/{m.group(1)}")
+    return protected
+
+
 def strip_pptx(input_path: str, output_path: str) -> None:
     if not os.path.exists(input_path):
         raise FileNotFoundError(input_path)
@@ -58,10 +74,14 @@ def strip_pptx(input_path: str, output_path: str) -> None:
 
     try:
         with zipfile.ZipFile(input_path, "r") as zin:
+            protected = brand_media(zin)
             with zipfile.ZipFile(tmp_path, "w", zipfile.ZIP_DEFLATED) as zout:
                 for item in zin.infolist():
                     name = item.filename
                     is_media = name.startswith("ppt/media/")
+                    if is_media and name in protected:
+                        kept += 1
+                        is_media = False  # keep brand asset untouched
                     if is_media:
                         ext = name.lower().rsplit(".", 1)[-1]
                         if ext in ("png", "jpg", "jpeg", "svg"):
