@@ -83,7 +83,7 @@ Both templates contain the same 65 layouts. Layout names are exact — use them 
 
 ### Focus points (13)
 
-"FOCUS" layouts present N highlighted items (numbers, KPIs, offerings):
+"FOCUS" layouts present N highlighted items (key points, offerings). Note: in the "Numbers" variants the layout itself draws circled 1–N markers above each item — the placeholders hold a short headline + supporting text per item, not large statistics:
 
 | Layout | Items |
 |---|---|
