@@ -49,7 +49,7 @@ jobs:
 
       # Tagging is gated on meta.version, not on dist/ churn: regenerating output
       # from a build-script tweak must never move an already-published tag, or
-      # consumers pinning github:forteadvice/designsystem#vX.Y.Z silently get
+      # consumers pinning github:forteadvice/forteadvice-designsystem#vX.Y.Z silently get
       # different content. Bump meta.version in tokens.json to cut a release.
       - name: Tag version
         run: |

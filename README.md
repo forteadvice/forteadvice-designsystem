@@ -18,7 +18,7 @@ This repository is the single source of truth for colors, typography, radius, mo
 ### Install
 
 ```bash
-npm install github:forteadvice/designsystem
+npm install github:forteadvice/forteadvice-designsystem
 ```
 
 ### Tailwind v4
