@@ -229,11 +229,123 @@ function validateNonTextContrast() {
 }
 
 // ---------------------------------------------------------------------------
-// 5. Mode parity check
+// 5. Non-colour token checks
+//
+// The type scale records both a value and the Tailwind class design.md is
+// written against. Those two can drift silently, so they are checked against
+// each other using Tailwind's own default scale.
+// ---------------------------------------------------------------------------
+
+const TW_FONT_SIZE = {
+  "text-xs": ["0.75rem", "1rem"],
+  "text-sm": ["0.875rem", "1.25rem"],
+  "text-base": ["1rem", "1.5rem"],
+  "text-lg": ["1.125rem", "1.75rem"],
+  "text-xl": ["1.25rem", "1.75rem"],
+  "text-2xl": ["1.5rem", "2rem"],
+  "text-3xl": ["1.875rem", "2.25rem"],
+  "text-4xl": ["2.25rem", "2.5rem"],
+};
+
+const TW_FONT_WEIGHT = {
+  "font-normal": 400,
+  "font-medium": 500,
+  "font-semibold": 600,
+  "font-bold": 700,
+};
+
+const DIMENSION_RE = /^(0|-?\d+(\.\d+)?(px|rem|ms))$/;
+
+function validateNonColorTokens() {
+  console.log("\n5. Non-colour tokens");
+
+  // --- Type scale ---
+  const scale = tokens.brand?.typography?.scale;
+  if (!scale) {
+    error("brand.typography.scale is required");
+  } else {
+    let scaleErrors = 0;
+    for (const [role, step] of Object.entries(scale)) {
+      const classes = (step.tailwind ?? "").split(/\s+/);
+      const sizeClass = classes.find((c) => TW_FONT_SIZE[c]);
+      if (!sizeClass) {
+        error(`typography.scale.${role}.tailwind has no known text-* size class`);
+        scaleErrors++;
+        continue;
+      }
+      const [size, lineHeight] = TW_FONT_SIZE[sizeClass];
+      if (step.fontSize !== size) {
+        error(
+          `typography.scale.${role}: fontSize "${step.fontSize}" does not match ${sizeClass} (${size})`
+        );
+        scaleErrors++;
+      }
+      if (step.lineHeight !== lineHeight) {
+        error(
+          `typography.scale.${role}: lineHeight "${step.lineHeight}" does not match ${sizeClass} (${lineHeight})`
+        );
+        scaleErrors++;
+      }
+      const weightClass = classes.find((c) => TW_FONT_WEIGHT[c]);
+      const expectedWeight = weightClass ? TW_FONT_WEIGHT[weightClass] : 400;
+      if (step.fontWeight !== expectedWeight) {
+        error(
+          `typography.scale.${role}: fontWeight ${step.fontWeight} does not match "${
+            weightClass ?? "(no font-* class, defaults to 400)"
+          }" (${expectedWeight})`
+        );
+        scaleErrors++;
+      }
+    }
+    if (scaleErrors === 0)
+      ok(`type scale: ${Object.keys(scale).length} roles consistent with their Tailwind classes`);
+  }
+
+  // --- Radius, motion, component dimensions ---
+  let dimensionCount = 0;
+  let dimensionErrors = 0;
+
+  function checkDimension(path, value) {
+    dimensionCount++;
+    if (typeof value !== "string" || !DIMENSION_RE.test(value)) {
+      error(`${path}: "${value}" is not a valid dimension (expected 0, or a px/rem/ms value)`);
+      dimensionErrors++;
+    }
+  }
+
+  if (!tokens.radius) error("radius is required");
+  else for (const [key, value] of Object.entries(tokens.radius)) checkDimension(`radius.${key}`, value);
+
+  if (!tokens.motion) error("motion is required");
+  else {
+    checkDimension("motion.duration", tokens.motion.duration);
+    if (!tokens.motion.easing) error("motion.easing is required");
+  }
+
+  if (!tokens.components) error("components is required");
+  else
+    for (const [component, props] of Object.entries(tokens.components))
+      for (const [prop, value] of Object.entries(props))
+        checkDimension(`components.${component}.${prop}`, value);
+
+  if (dimensionErrors === 0) ok(`${dimensionCount} dimension values checked`);
+
+  // The button radius and the pill radius describe the same decision, stated in
+  // two places in design.md; keep them from drifting apart.
+  if (tokens.radius?.pill && tokens.components?.button?.radius &&
+      tokens.radius.pill !== tokens.components.button.radius)
+    error(
+      `radius.pill "${tokens.radius.pill}" and components.button.radius ` +
+        `"${tokens.components.button.radius}" disagree`
+    );
+}
+
+// ---------------------------------------------------------------------------
+// 6. Mode parity check
 // ---------------------------------------------------------------------------
 
 function validateModeParity() {
-  console.log("\n5. Mode parity check");
+  console.log("\n6. Mode parity check");
 
   const modeEntries = Object.entries(tokens.colors.modes);
   if (modeEntries.length === 0) {
@@ -287,6 +399,7 @@ validateSchema();
 validateColorFormats();
 validateTextContrast();
 validateNonTextContrast();
+validateNonColorTokens();
 validateModeParity();
 
 console.log(`\n${"─".repeat(50)}`);

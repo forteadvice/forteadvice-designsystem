@@ -3,7 +3,7 @@
 
 export declare const meta: {
   readonly "name": "Forte Advice Design System";
-  readonly "version": "0.5.0";
+  readonly "version": "0.6.0";
   readonly "updated": "2026-09-05";
 };
 
@@ -20,6 +20,56 @@ export declare const typography: {
     readonly "semibold": 600;
     readonly "bold": 700;
   };
+  readonly "scale": {
+    readonly "h1": {
+      readonly "fontSize": "2.25rem";
+      readonly "lineHeight": "2.5rem";
+      readonly "fontWeight": 700;
+      readonly "tailwind": "text-4xl font-bold";
+    };
+    readonly "h2": {
+      readonly "fontSize": "1.875rem";
+      readonly "lineHeight": "2.25rem";
+      readonly "fontWeight": 600;
+      readonly "tailwind": "text-3xl font-semibold";
+    };
+    readonly "h3": {
+      readonly "fontSize": "1.5rem";
+      readonly "lineHeight": "2rem";
+      readonly "fontWeight": 600;
+      readonly "tailwind": "text-2xl font-semibold";
+    };
+    readonly "h4": {
+      readonly "fontSize": "1.25rem";
+      readonly "lineHeight": "1.75rem";
+      readonly "fontWeight": 600;
+      readonly "tailwind": "text-xl font-semibold";
+    };
+    readonly "body": {
+      readonly "fontSize": "1rem";
+      readonly "lineHeight": "1.5rem";
+      readonly "fontWeight": 400;
+      readonly "tailwind": "text-base";
+    };
+    readonly "bodySmall": {
+      readonly "fontSize": "0.875rem";
+      readonly "lineHeight": "1.25rem";
+      readonly "fontWeight": 400;
+      readonly "tailwind": "text-sm";
+    };
+    readonly "caption": {
+      readonly "fontSize": "0.75rem";
+      readonly "lineHeight": "1rem";
+      readonly "fontWeight": 500;
+      readonly "tailwind": "text-xs font-medium";
+    };
+    readonly "code": {
+      readonly "fontSize": "0.875rem";
+      readonly "lineHeight": "1.25rem";
+      readonly "fontWeight": 400;
+      readonly "tailwind": "text-sm font-mono";
+    };
+  };
   readonly "notes": {
     readonly "powerpoint": "Aptos and Aptos Display are used in PowerPoint templates instead of Geist, since Aptos ships with Microsoft 365 and works without per-machine font installation. For all web/digital products, use Geist.";
   };
@@ -30,6 +80,7 @@ export declare const icons: {
   readonly "defaultWeight": "regular";
   readonly "weights": readonly ["thin", "light", "regular", "bold", "fill", "duotone"];
   readonly "defaultSizes": readonly [16, 20, 24, 28];
+  readonly "buttonSize": 14;
 };
 
 export declare const colors: {
@@ -242,6 +293,44 @@ export declare const colors: {
       };
       readonly "focus": "#FF6A3D";
     };
+  };
+};
+
+export declare const radius: {
+  readonly "none": "0";
+  readonly "input": "0.5rem";
+  readonly "card": "0.75rem";
+  readonly "pill": "9999px";
+  readonly "shadcnBase": "0.625rem";
+};
+
+export declare const motion: {
+  readonly "duration": "300ms";
+  readonly "easing": "ease-out";
+};
+
+export declare const components: {
+  readonly "button": {
+    readonly "height": "44px";
+    readonly "paddingX": "24px";
+    readonly "radius": "9999px";
+    readonly "iconSize": "14px";
+    readonly "iconCircleSize": "44px";
+    readonly "iconCircleOverlap": "-12px";
+    readonly "textOnlyIconGap": "8px";
+  };
+  readonly "card": {
+    readonly "padding": "24px";
+    readonly "radius": "0.75rem";
+  };
+  readonly "input": {
+    readonly "paddingX": "16px";
+    readonly "paddingY": "10px";
+    readonly "radius": "0.5rem";
+  };
+  readonly "focusRing": {
+    readonly "width": "2px";
+    readonly "offset": "2px";
   };
 };
 

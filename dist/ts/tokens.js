@@ -3,7 +3,7 @@
 
 export const meta = {
   "name": "Forte Advice Design System",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "updated": "2026-09-05"
 };
 
@@ -19,6 +19,56 @@ export const typography = {
     "medium": 500,
     "semibold": 600,
     "bold": 700
+  },
+  "scale": {
+    "h1": {
+      "fontSize": "2.25rem",
+      "lineHeight": "2.5rem",
+      "fontWeight": 700,
+      "tailwind": "text-4xl font-bold"
+    },
+    "h2": {
+      "fontSize": "1.875rem",
+      "lineHeight": "2.25rem",
+      "fontWeight": 600,
+      "tailwind": "text-3xl font-semibold"
+    },
+    "h3": {
+      "fontSize": "1.5rem",
+      "lineHeight": "2rem",
+      "fontWeight": 600,
+      "tailwind": "text-2xl font-semibold"
+    },
+    "h4": {
+      "fontSize": "1.25rem",
+      "lineHeight": "1.75rem",
+      "fontWeight": 600,
+      "tailwind": "text-xl font-semibold"
+    },
+    "body": {
+      "fontSize": "1rem",
+      "lineHeight": "1.5rem",
+      "fontWeight": 400,
+      "tailwind": "text-base"
+    },
+    "bodySmall": {
+      "fontSize": "0.875rem",
+      "lineHeight": "1.25rem",
+      "fontWeight": 400,
+      "tailwind": "text-sm"
+    },
+    "caption": {
+      "fontSize": "0.75rem",
+      "lineHeight": "1rem",
+      "fontWeight": 500,
+      "tailwind": "text-xs font-medium"
+    },
+    "code": {
+      "fontSize": "0.875rem",
+      "lineHeight": "1.25rem",
+      "fontWeight": 400,
+      "tailwind": "text-sm font-mono"
+    }
   },
   "notes": {
     "powerpoint": "Aptos and Aptos Display are used in PowerPoint templates instead of Geist, since Aptos ships with Microsoft 365 and works without per-machine font installation. For all web/digital products, use Geist."
@@ -41,7 +91,8 @@ export const icons = {
     20,
     24,
     28
-  ]
+  ],
+  "buttonSize": 14
 };
 
 export const colors = {
@@ -254,6 +305,44 @@ export const colors = {
       },
       "focus": "#FF6A3D"
     }
+  }
+};
+
+export const radius = {
+  "none": "0",
+  "input": "0.5rem",
+  "card": "0.75rem",
+  "pill": "9999px",
+  "shadcnBase": "0.625rem"
+};
+
+export const motion = {
+  "duration": "300ms",
+  "easing": "ease-out"
+};
+
+export const components = {
+  "button": {
+    "height": "44px",
+    "paddingX": "24px",
+    "radius": "9999px",
+    "iconSize": "14px",
+    "iconCircleSize": "44px",
+    "iconCircleOverlap": "-12px",
+    "textOnlyIconGap": "8px"
+  },
+  "card": {
+    "padding": "24px",
+    "radius": "0.75rem"
+  },
+  "input": {
+    "paddingX": "16px",
+    "paddingY": "10px",
+    "radius": "0.5rem"
+  },
+  "focusRing": {
+    "width": "2px",
+    "offset": "2px"
   }
 };
 

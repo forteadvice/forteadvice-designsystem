@@ -151,13 +151,41 @@ function buildCSS() {
   lines.push("");
   lines.push("  /* State colors */");
   for (const [key, value] of Object.entries(state)) {
-    lines.push(`  --color-${key}: ${value};`);
+    lines.push(`  --color-${camelToKebab(key)}: ${value};`);
   }
 
   lines.push("");
   lines.push("  /* Typography */");
   lines.push(`  --font-sans: '${typography.fontFamily.sans}', system-ui, sans-serif;`);
   lines.push(`  --font-mono: '${typography.fontFamily.mono}', ui-monospace, monospace;`);
+
+  lines.push("");
+  lines.push("  /* Type scale (roles from design.md) */");
+  for (const [role, step] of Object.entries(typography.scale)) {
+    const name = camelToKebab(role);
+    lines.push(`  --text-${name}-size: ${step.fontSize};`);
+    lines.push(`  --text-${name}-line-height: ${step.lineHeight};`);
+    lines.push(`  --text-${name}-weight: ${step.fontWeight};`);
+  }
+
+  lines.push("");
+  lines.push("  /* Radius */");
+  for (const [key, value] of Object.entries(tokens.radius)) {
+    lines.push(`  --radius-${camelToKebab(key)}: ${value};`);
+  }
+
+  lines.push("");
+  lines.push("  /* Motion */");
+  lines.push(`  --duration: ${tokens.motion.duration};`);
+  lines.push(`  --easing: ${tokens.motion.easing};`);
+
+  lines.push("");
+  lines.push("  /* Component dimensions */");
+  for (const [component, props] of Object.entries(tokens.components)) {
+    for (const [prop, value] of Object.entries(props)) {
+      lines.push(`  --${camelToKebab(component)}-${camelToKebab(prop)}: ${value};`);
+    }
+  }
 
   lines.push("}");
   lines.push("");
@@ -249,7 +277,7 @@ function buildShadcnCSS() {
     out.push(`  --chart-3: ${mode.stroke.subtle};`);
     out.push(`  --chart-4: ${state.success};`);
     out.push(`  --chart-5: ${state.warning};`);
-    out.push(`  --radius: 0.625rem;`);
+    out.push(`  --radius: ${tokens.radius.shadcnBase};`);
     return out.join("\n");
   }
 
@@ -272,6 +300,13 @@ function buildTailwindPreset() {
   const brandColors = {};
   for (const [key, value] of Object.entries(primitives)) {
     brandColors[camelToKebab(key)] = value;
+  }
+
+  // Build state color map (kebab-cased, so the v3 preset and the v4 @theme
+  // generate the same class names)
+  const stateColors = {};
+  for (const [key, value] of Object.entries(state)) {
+    stateColors[camelToKebab(key)] = value;
   }
 
   // Build tone color maps
@@ -308,7 +343,7 @@ function buildTailwindPreset() {
           focus: "var(--focus)",
           // Static colors
           brand: brandColors,
-          state,
+          state: stateColors,
           ...toneColors,
         },
         fontFamily: {
@@ -331,14 +366,108 @@ function buildTailwindPreset() {
 }
 
 // ---------------------------------------------------------------------------
-// 4. TypeScript Generator (runtime ESM + declarations)
+// 4. Tailwind v4 @theme Generator
+//
+// Tailwind v4 does not pick up a JS config on its own — it needs an explicit
+// @config directive — so the preset above only serves v3. v4 projects import
+// this file instead, after `@import "tailwindcss"`.
+//
+// It deliberately exposes the same utility surface as the v3 preset (colours
+// and fonts, nothing else), so the class names documented in CLAUDE.md and
+// design.md mean the same thing on both versions. Radius, motion and component
+// dimensions stay custom properties, consumed as var(--radius-card) and
+// friends: the recipes in design.md are written against Tailwind's own
+// rounded-*/h-*/gap-* utilities, and a parallel set could only drift from them.
+// ---------------------------------------------------------------------------
+
+function buildTailwindV4Theme() {
+  const { primitives, tones, state } = tokens.colors;
+  const { typography } = tokens.brand;
+  const lines = [];
+
+  lines.push("/* ============================================");
+  lines.push("   Forte Advice — Tailwind v4 theme (auto-generated)");
+  lines.push("   DO NOT EDIT — regenerate with: npm run build");
+  lines.push("");
+  lines.push("   Usage — order matters. CSS comments do not nest, so the example");
+  lines.push("   below is written without inline annotations on purpose:");
+  lines.push("");
+  lines.push('     @import "tailwindcss";');
+  lines.push("     @import '@forteadvice/design-tokens/css';");
+  lines.push("     @import '@forteadvice/design-tokens/theme';");
+  lines.push("");
+  lines.push("   The css import supplies the runtime variables and the mode cascade;");
+  lines.push("   this file maps them onto Tailwind utilities.");
+  lines.push("   ============================================ */");
+  lines.push("");
+
+  // `inline` is required, not stylistic. Without it the utility would resolve
+  // --color-surface-primary once at :root and inherit that computed value, so a
+  // nested [data-theme] section would keep the root mode's colour. With it, the
+  // utility emits var(--surface-primary) directly and the cascade works.
+  lines.push("/* Semantic, mode-aware colours — `inline` keeps mode switching working. */");
+  lines.push("@theme inline {");
+  const semantic = [
+    ["surface-primary", "--surface-primary"],
+    ["surface-secondary", "--surface-secondary"],
+    ["surface-opaque", "--surface-opaque"],
+    ["text-primary", "--text-primary"],
+    ["text-secondary", "--text-secondary"],
+    ["text-inverted", "--text-inverted"],
+    ["text-disabled", "--text-disabled"],
+    ["button-primary", "--button-primary"],
+    ["button-primary-hover", "--button-primary-hover"],
+    ["button-disabled", "--button-disabled"],
+    ["stroke-harsh", "--stroke-harsh"],
+    ["stroke-subtle", "--stroke-subtle"],
+    ["focus", "--focus"],
+  ];
+  for (const [name, ref] of semantic) {
+    lines.push(`  --color-${name}: var(${ref});`);
+  }
+  lines.push("}");
+  lines.push("");
+
+  lines.push("/* Static values — safe to resolve at build time. */");
+  lines.push("@theme {");
+  lines.push("  /* Brand primitives */");
+  for (const [key, value] of Object.entries(primitives)) {
+    lines.push(`  --color-brand-${camelToKebab(key)}: ${value};`);
+  }
+
+  lines.push("");
+  lines.push("  /* Tone scales */");
+  for (const [scaleName, scale] of Object.entries(tones)) {
+    for (const [step, value] of Object.entries(scale)) {
+      lines.push(`  --color-${camelToKebab(scaleName)}-${step}: ${value};`);
+    }
+  }
+
+  lines.push("");
+  lines.push("  /* State colors */");
+  for (const [key, value] of Object.entries(state)) {
+    lines.push(`  --color-state-${camelToKebab(key)}: ${value};`);
+  }
+
+  lines.push("");
+  lines.push("  /* Typography */");
+  lines.push(`  --font-sans: '${typography.fontFamily.sans}', system-ui, sans-serif;`);
+  lines.push(`  --font-mono: '${typography.fontFamily.mono}', ui-monospace, monospace;`);
+  lines.push("}");
+  lines.push("");
+
+  write("dist/css/theme.css", lines.join("\n"));
+}
+
+// ---------------------------------------------------------------------------
+// 5. TypeScript Generator (runtime ESM + declarations)
 //
 // The package ships compiled .js plus .d.ts rather than raw .ts: files inside
 // node_modules are not type-stripped by Node and are not transpiled by default
 // by Next/webpack/Vite, so a raw .ts entrypoint fails for most consumers.
 // ---------------------------------------------------------------------------
 
-const TS_EXPORTS = ["meta", "typography", "icons", "colors"];
+const TS_EXPORTS = ["meta", "typography", "icons", "colors", "radius", "motion", "components"];
 
 function tsExportValues() {
   return {
@@ -346,6 +475,9 @@ function tsExportValues() {
     typography: tokens.brand.typography,
     icons: tokens.brand.icons,
     colors: tokens.colors,
+    radius: tokens.radius,
+    motion: tokens.motion,
+    components: tokens.components,
   };
 }
 
@@ -400,6 +532,7 @@ console.log("Building Forte Advice design tokens...\n");
 buildCSS();
 buildShadcnCSS();
 buildTailwindPreset();
+buildTailwindV4Theme();
 buildJS();
 buildTypeScriptDeclarations();
 console.log("\nDone!");

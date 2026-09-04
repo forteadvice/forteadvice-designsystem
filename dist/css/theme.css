@@ -1,0 +1,103 @@
+/* ============================================
+   Forte Advice — Tailwind v4 theme (auto-generated)
+   DO NOT EDIT — regenerate with: npm run build
+
+   Usage — order matters. CSS comments do not nest, so the example
+   below is written without inline annotations on purpose:
+
+     @import "tailwindcss";
+     @import '@forteadvice/design-tokens/css';
+     @import '@forteadvice/design-tokens/theme';
+
+   The css import supplies the runtime variables and the mode cascade;
+   this file maps them onto Tailwind utilities.
+   ============================================ */
+
+/* Semantic, mode-aware colours — `inline` keeps mode switching working. */
+@theme inline {
+  --color-surface-primary: var(--surface-primary);
+  --color-surface-secondary: var(--surface-secondary);
+  --color-surface-opaque: var(--surface-opaque);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-inverted: var(--text-inverted);
+  --color-text-disabled: var(--text-disabled);
+  --color-button-primary: var(--button-primary);
+  --color-button-primary-hover: var(--button-primary-hover);
+  --color-button-disabled: var(--button-disabled);
+  --color-stroke-harsh: var(--stroke-harsh);
+  --color-stroke-subtle: var(--stroke-subtle);
+  --color-focus: var(--focus);
+}
+
+/* Static values — safe to resolve at build time. */
+@theme {
+  /* Brand primitives */
+  --color-brand-dark-plum: #221C38;
+  --color-brand-plum: #39344B;
+  --color-brand-harbour-mist: #BBC6C5;
+  --color-brand-ash-grey: #D6DDDC;
+  --color-brand-cream: #F2F0E7;
+  --color-brand-cookie-dough: #EDE6C3;
+  --color-brand-burgendy: #511E29;
+  --color-brand-dark-burgendy: #3D0E18;
+  --color-brand-wine: #751B2F;
+  --color-brand-highlight: #FF6A3D;
+  --color-brand-white: #FFFFFF;
+
+  /* Tone scales */
+  --color-harbour-mist-50: #F7F8F8;
+  --color-harbour-mist-100: #EEF0F0;
+  --color-harbour-mist-200: #D9DEDE;
+  --color-harbour-mist-300: #BBC6C5;
+  --color-harbour-mist-400: #919F9D;
+  --color-harbour-mist-500: #738482;
+  --color-harbour-mist-600: #5D6C6A;
+  --color-harbour-mist-700: #4C5857;
+  --color-harbour-mist-800: #414B4B;
+  --color-harbour-mist-900: #394141;
+  --color-harbour-mist-950: #262B2B;
+  --color-cream-50: #ECE8DA;
+  --color-cream-100: #E0DBC8;
+  --color-cream-200: #D4CDB3;
+  --color-cream-300: #CDC3A4;
+  --color-cream-400: #B8A77F;
+  --color-cream-500: #A99266;
+  --color-cream-600: #9C815A;
+  --color-cream-700: #82694C;
+  --color-cream-800: #6A5642;
+  --color-cream-900: #574737;
+  --color-cream-950: #2E241C;
+  --color-plum-50: #F4F4FA;
+  --color-plum-100: #E7E7F2;
+  --color-plum-200: #D4D4E9;
+  --color-plum-300: #B7B8D9;
+  --color-plum-400: #9595C5;
+  --color-plum-500: #7F7BB6;
+  --color-plum-600: #7269A7;
+  --color-plum-700: #685D98;
+  --color-plum-800: #594F7E;
+  --color-plum-900: #494365;
+  --color-plum-950: #39344B;
+  --color-burgendy-50: #FBF4F7;
+  --color-burgendy-100: #F7ECF0;
+  --color-burgendy-200: #F1D9E3;
+  --color-burgendy-300: #E7BACA;
+  --color-burgendy-400: #D78FA8;
+  --color-burgendy-500: #C76D89;
+  --color-burgendy-600: #B2506A;
+  --color-burgendy-700: #983E53;
+  --color-burgendy-800: #7F3546;
+  --color-burgendy-900: #6B303D;
+  --color-burgendy-950: #511E29;
+
+  /* State colors */
+  --color-state-error: #9D140F;
+  --color-state-warning: #CBAE54;
+  --color-state-success: #518579;
+  --color-state-error-foreground: #F2F0E7;
+
+  /* Typography */
+  --font-sans: 'Geist', system-ui, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
+}

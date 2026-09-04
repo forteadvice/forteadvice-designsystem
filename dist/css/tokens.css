@@ -67,11 +67,64 @@
   --color-error: #9D140F;
   --color-warning: #CBAE54;
   --color-success: #518579;
-  --color-errorForeground: #F2F0E7;
+  --color-error-foreground: #F2F0E7;
 
   /* Typography */
   --font-sans: 'Geist', system-ui, sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, monospace;
+
+  /* Type scale (roles from design.md) */
+  --text-h1-size: 2.25rem;
+  --text-h1-line-height: 2.5rem;
+  --text-h1-weight: 700;
+  --text-h2-size: 1.875rem;
+  --text-h2-line-height: 2.25rem;
+  --text-h2-weight: 600;
+  --text-h3-size: 1.5rem;
+  --text-h3-line-height: 2rem;
+  --text-h3-weight: 600;
+  --text-h4-size: 1.25rem;
+  --text-h4-line-height: 1.75rem;
+  --text-h4-weight: 600;
+  --text-body-size: 1rem;
+  --text-body-line-height: 1.5rem;
+  --text-body-weight: 400;
+  --text-body-small-size: 0.875rem;
+  --text-body-small-line-height: 1.25rem;
+  --text-body-small-weight: 400;
+  --text-caption-size: 0.75rem;
+  --text-caption-line-height: 1rem;
+  --text-caption-weight: 500;
+  --text-code-size: 0.875rem;
+  --text-code-line-height: 1.25rem;
+  --text-code-weight: 400;
+
+  /* Radius */
+  --radius-none: 0;
+  --radius-input: 0.5rem;
+  --radius-card: 0.75rem;
+  --radius-pill: 9999px;
+  --radius-shadcn-base: 0.625rem;
+
+  /* Motion */
+  --duration: 300ms;
+  --easing: ease-out;
+
+  /* Component dimensions */
+  --button-height: 44px;
+  --button-padding-x: 24px;
+  --button-radius: 9999px;
+  --button-icon-size: 14px;
+  --button-icon-circle-size: 44px;
+  --button-icon-circle-overlap: -12px;
+  --button-text-only-icon-gap: 8px;
+  --card-padding: 24px;
+  --card-radius: 0.75rem;
+  --input-padding-x: 16px;
+  --input-padding-y: 10px;
+  --input-radius: 0.5rem;
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
 }
 
 /* === Default: Cream / Plum === */

@@ -7,8 +7,10 @@ You are working on a project that uses the Forte Advice design system. Follow th
 - **Tokens:** All design decisions live in `tokens.json`. Never invent colors, fonts, or spacing.
 - **CSS:** Import `@forteadvice/design-tokens/css` for CSS custom properties.
 - **shadcn/ui:** Import `@forteadvice/design-tokens/shadcn` for shadcn-compatible CSS variables.
-- **Tailwind:** Use the preset from `@forteadvice/design-tokens/tailwind`.
+- **Tailwind v4:** Import `@forteadvice/design-tokens/theme` after `@import "tailwindcss"` and after the `css` import.
+- **Tailwind v3:** Use the preset from `@forteadvice/design-tokens/tailwind`.
 - **TypeScript:** Import from `@forteadvice/design-tokens` for programmatic access.
+- **Dimensions:** Radius, motion and component sizes are tokens too — use `var(--button-height)`, `var(--radius-card)`, `var(--duration)`. Layout spacing uses Tailwind's default scale; there is no Forte spacing scale to look up.
 
 ## Rules
 
@@ -68,7 +70,8 @@ scripts/build.js     — Generates dist/ from tokens.json
 scripts/validate.js  — Validates tokens + WCAG contrast
 dist/css/tokens.css  — Generated CSS custom properties
 dist/css/shadcn.css  — Generated shadcn/ui compatible theme
-dist/tailwind/preset.js — Generated Tailwind preset
+dist/css/theme.css   — Generated Tailwind v4 @theme
+dist/tailwind/preset.js — Generated Tailwind v3 preset
 dist/ts/tokens.js    — Generated runtime ESM module
 dist/ts/tokens.d.ts  — Generated TypeScript declarations
 design.md            — Visual rules and UI recipes

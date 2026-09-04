@@ -43,7 +43,7 @@ export default {
           "error": "#9D140F",
           "warning": "#CBAE54",
           "success": "#518579",
-          "errorForeground": "#F2F0E7"
+          "error-foreground": "#F2F0E7"
         },
         "harbour-mist": {
           "50": "#F7F8F8",
