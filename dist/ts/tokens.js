@@ -5,7 +5,7 @@ export const meta = {
   "name": "Forte Advice Design System",
   "version": "0.3.0",
   "updated": "2026-06-10"
-} as const;
+};
 
 export const typography = {
   "fontFamily": {
@@ -23,7 +23,7 @@ export const typography = {
   "notes": {
     "powerpoint": "Aptos and Aptos Display are used in PowerPoint templates instead of Geist, since Aptos ships with Microsoft 365 and works without per-machine font installation. For all web/digital products, use Geist."
   }
-} as const;
+};
 
 export const icons = {
   "library": "phosphor",
@@ -42,7 +42,7 @@ export const icons = {
     24,
     28
   ]
-} as const;
+};
 
 export const colors = {
   "primitives": {
@@ -245,10 +245,8 @@ export const colors = {
       "focus": "#FF6A3D"
     }
   }
-} as const;
+};
 
-export type ColorMode = "cream-plum" | "plum-cream" | "cream-burgendy" | "burgendy-cream" | "grey";
-
-export function modeColors(mode: ColorMode) {
+export function modeColors(mode) {
   return colors.modes[mode];
 }

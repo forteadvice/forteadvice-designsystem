@@ -17,6 +17,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # need full tag history to detect already-released versions
 
       - uses: actions/setup-node@v4
         with:
@@ -45,9 +47,17 @@ jobs:
           git commit -m "chore: regenerate design tokens"
           git push
 
+      # Tagging is gated on meta.version, not on dist/ churn: regenerating output
+      # from a build-script tweak must never move an already-published tag, or
+      # consumers pinning github:forteadvice/designsystem#vX.Y.Z silently get
+      # different content. Bump meta.version in tokens.json to cut a release.
       - name: Tag version
-        if: steps.changes.outputs.changed == 'true'
         run: |
           VERSION=$(node -p "require('./tokens.json').meta.version")
-          git tag -f "v${VERSION}"
-          git push -f origin "v${VERSION}"
+          if git rev-parse -q --verify "refs/tags/v${VERSION}" >/dev/null; then
+            echo "Tag v${VERSION} already exists — nothing to release."
+            echo "Bump meta.version in tokens.json to publish a new version."
+            exit 0
+          fi
+          git tag "v${VERSION}"
+          git push origin "v${VERSION}"

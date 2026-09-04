@@ -99,9 +99,11 @@ Switch modes by setting `data-theme` on any element:
 ## Usage Examples
 
 ```html
-<!-- Primary button -->
-<button class="bg-button-primary hover:bg-button-primary-hover text-text-inverted
-  px-5 py-2.5 rounded-lg font-semibold">
+<!-- Primary button — always pill-shaped (rounded-full), never rounded-lg -->
+<button class="inline-flex items-center justify-center gap-2 h-11 px-6
+  bg-button-primary hover:bg-button-primary-hover text-text-inverted
+  rounded-full font-semibold transition-colors duration-300 ease-out
+  focus:outline-none focus:ring-2 focus:ring-focus focus:ring-offset-2">
   Get Started
 </button>
 
@@ -150,7 +152,7 @@ npm run validate:pptx
 # Validate tokens (schema + WCAG contrast)
 npm run validate
 
-# Build all outputs (CSS + Tailwind preset + TypeScript)
+# Build all outputs (CSS + Tailwind preset + JS/TS module)
 npm run build
 ```
 
@@ -159,7 +161,11 @@ npm run build
 1. Edit `tokens.json`
 2. Bump `meta.version`
 3. Run `npm run build`
-4. Push to main — CI auto-commits generated files and tags the version
+4. Push to main — CI auto-commits generated files and tags `v<meta.version>`
+
+Tags are only created for a version that has not been released before. Existing
+tags are never moved, so a pinned `#vX.Y.Z` install always resolves to the same
+content — bump `meta.version` to publish a change.
 
 ## Architecture
 
@@ -169,5 +175,6 @@ tokens.json              ← Edit this
     ├─► dist/css/tokens.css        (CSS custom properties)
     ├─► dist/css/shadcn.css        (shadcn/ui theme)
     ├─► dist/tailwind/preset.js    (Tailwind preset)
-    └─► dist/ts/tokens.ts          (TypeScript module)
+    ├─► dist/ts/tokens.js          (runtime ESM module)
+    └─► dist/ts/tokens.d.ts        (TypeScript declarations)
 ```

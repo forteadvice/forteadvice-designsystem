@@ -69,7 +69,8 @@ scripts/validate.js  — Validates tokens + WCAG contrast
 dist/css/tokens.css  — Generated CSS custom properties
 dist/css/shadcn.css  — Generated shadcn/ui compatible theme
 dist/tailwind/preset.js — Generated Tailwind preset
-dist/ts/tokens.ts    — Generated TypeScript module
+dist/ts/tokens.js    — Generated runtime ESM module
+dist/ts/tokens.d.ts  — Generated TypeScript declarations
 design.md            — Visual rules and UI recipes
 powerpoint.md        — PowerPoint rules + layout reference
 scripts/validate-pptx.py — Validates .pptx templates against tokens.json

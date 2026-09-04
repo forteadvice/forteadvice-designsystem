@@ -44,7 +44,7 @@
   }
 
   @media (prefers-color-scheme: dark) {
-    :root {
+    :root:not([data-theme]) {
       --background: #221C38;
       --foreground: #F2F0E7;
       --card: #39344B;

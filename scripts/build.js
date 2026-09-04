@@ -6,8 +6,9 @@
  * Reads tokens.json and generates:
  *   1. dist/css/tokens.css     — CSS custom properties with mode switching
  *   2. dist/css/shadcn.css     — shadcn/ui compatible CSS variables
- *   3. dist/tailwind/preset.js — Tailwind v4 preset
- *   4. dist/ts/tokens.ts       — TypeScript token module
+ *   3. dist/tailwind/preset.js — Tailwind preset
+ *   4. dist/ts/tokens.js       — runtime ESM token module
+ *   5. dist/ts/tokens.d.ts     — type declarations for the module above
  */
 
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
@@ -28,6 +29,27 @@ function camelToKebab(str) {
 
 function ensureDir(filePath) {
   mkdirSync(dirname(filePath), { recursive: true });
+}
+
+/**
+ * Serializes a JSON value into an equivalent TypeScript literal type, so the
+ * generated .d.ts preserves exact hex/number literals (what `as const` gave us
+ * when the module was shipped as raw .ts).
+ */
+function tsLiteralType(value, indent = 0) {
+  const pad = "  ".repeat(indent);
+  const padInner = "  ".repeat(indent + 1);
+  if (value === null) return "null";
+  if (Array.isArray(value)) {
+    return `readonly [${value.map((v) => tsLiteralType(v, indent)).join(", ")}]`;
+  }
+  if (typeof value === "object") {
+    const entries = Object.entries(value).map(
+      ([key, v]) => `${padInner}readonly ${JSON.stringify(key)}: ${tsLiteralType(v, indent + 1)};`
+    );
+    return `{\n${entries.join("\n")}\n${pad}}`;
+  }
+  return JSON.stringify(value);
 }
 
 function write(relPath, content) {
@@ -109,9 +131,14 @@ function buildCSS() {
   lines.push("");
 
   // Dark: plum-cream (auto via media query)
+  //
+  // The auto-dark block is scoped to :root:not([data-theme]) on purpose. A media
+  // query adds no specificity, so a plain `:root` here would tie with
+  // [data-theme="cream-plum"] above and win on source order — meaning an
+  // explicitly forced light theme would render dark on a dark-mode OS.
   lines.push("/* === Dark: Plum / Cream (auto + manual) === */");
   lines.push("@media (prefers-color-scheme: dark) {");
-  lines.push("  :root {");
+  lines.push("  :root:not([data-theme]) {");
   lines.push(modeBlock(modes["plum-cream"]).replace(/^  /gm, "    "));
   lines.push("  }");
   lines.push("}");
@@ -196,9 +223,10 @@ function buildShadcnCSS() {
   lines.push("  }");
   lines.push("");
 
-  // Dark: plum-cream
+  // Dark: plum-cream — scoped like tokens.css so an explicit [data-theme]
+  // always wins over the OS preference, regardless of block order below.
   lines.push("  @media (prefers-color-scheme: dark) {");
-  lines.push("    :root {");
+  lines.push("    :root:not([data-theme]) {");
   lines.push(shadcnBlock(modes["plum-cream"]).replace(/^  /gm, "      "));
   lines.push("    }");
   lines.push("  }");
@@ -288,42 +316,65 @@ function buildTailwindPreset() {
 }
 
 // ---------------------------------------------------------------------------
-// 3. TypeScript Generator
+// 4. TypeScript Generator (runtime ESM + declarations)
+//
+// The package ships compiled .js plus .d.ts rather than raw .ts: files inside
+// node_modules are not type-stripped by Node and are not transpiled by default
+// by Next/webpack/Vite, so a raw .ts entrypoint fails for most consumers.
 // ---------------------------------------------------------------------------
 
-function buildTypeScript() {
+const TS_EXPORTS = ["meta", "typography", "icons", "colors"];
+
+function tsExportValues() {
+  return {
+    meta: tokens.meta,
+    typography: tokens.brand.typography,
+    icons: tokens.brand.icons,
+    colors: tokens.colors,
+  };
+}
+
+function buildJS() {
+  const values = tsExportValues();
   const lines = [];
 
   lines.push("// Forte Advice Design Tokens (auto-generated)");
   lines.push("// DO NOT EDIT — regenerate with: npm run build");
   lines.push("");
 
-  // Meta
-  lines.push(`export const meta = ${JSON.stringify(tokens.meta, null, 2)} as const;`);
-  lines.push("");
+  for (const name of TS_EXPORTS) {
+    lines.push(`export const ${name} = ${JSON.stringify(values[name], null, 2)};`);
+    lines.push("");
+  }
 
-  // Typography
-  lines.push(`export const typography = ${JSON.stringify(tokens.brand.typography, null, 2)} as const;`);
-  lines.push("");
-
-  // Icons
-  lines.push(`export const icons = ${JSON.stringify(tokens.brand.icons, null, 2)} as const;`);
-  lines.push("");
-
-  // Colors
-  lines.push(`export const colors = ${JSON.stringify(tokens.colors, null, 2)} as const;`);
-  lines.push("");
-
-  // Mode type + helper
-  const modeKeys = Object.keys(tokens.colors.modes);
-  lines.push(`export type ColorMode = ${modeKeys.map((k) => `"${k}"`).join(" | ")};`);
-  lines.push("");
-  lines.push("export function modeColors(mode: ColorMode) {");
+  lines.push("export function modeColors(mode) {");
   lines.push("  return colors.modes[mode];");
   lines.push("}");
   lines.push("");
 
-  write("dist/ts/tokens.ts", lines.join("\n"));
+  write("dist/ts/tokens.js", lines.join("\n"));
+}
+
+function buildTypeScriptDeclarations() {
+  const values = tsExportValues();
+  const lines = [];
+
+  lines.push("// Forte Advice Design Tokens (auto-generated)");
+  lines.push("// DO NOT EDIT — regenerate with: npm run build");
+  lines.push("");
+
+  for (const name of TS_EXPORTS) {
+    lines.push(`export declare const ${name}: ${tsLiteralType(values[name])};`);
+    lines.push("");
+  }
+
+  const modeKeys = Object.keys(tokens.colors.modes);
+  lines.push(`export type ColorMode = ${modeKeys.map((k) => `"${k}"`).join(" | ")};`);
+  lines.push("");
+  lines.push("export declare function modeColors(mode: ColorMode): (typeof colors)[\"modes\"][ColorMode];");
+  lines.push("");
+
+  write("dist/ts/tokens.d.ts", lines.join("\n"));
 }
 
 // ---------------------------------------------------------------------------
@@ -334,5 +385,6 @@ console.log("Building Forte Advice design tokens...\n");
 buildCSS();
 buildShadcnCSS();
 buildTailwindPreset();
-buildTypeScript();
+buildJS();
+buildTypeScriptDeclarations();
 console.log("\nDone!");
