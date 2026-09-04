@@ -3,7 +3,7 @@
 
 export declare const meta: {
   readonly "name": "Forte Advice Design System";
-  readonly "version": "0.6.0";
+  readonly "version": "0.7.0";
   readonly "updated": "2026-09-05";
 };
 
@@ -87,7 +87,7 @@ export declare const colors: {
   readonly "notes": {
     readonly "colorScheme": "Each mode declares colorScheme so the generated CSS can emit the color-scheme property. Without it, native scrollbars, selects and date pickers stay light on a dark surface.";
     readonly "errorForeground": "Text/icon colour for content sitting on state.error (shadcn --destructive-foreground). It is cream rather than the per-mode text.inverted, because text.inverted is dark plum in the dark modes and would be unreadable on the error red.";
-    readonly "focus": "The focus ring colour is mode-dependent and lives in each entry of colors.modes, surfaced as --focus / ring-focus. There is deliberately no colors.state.focus: a single global value would contradict the per-mode ones.";
+    readonly "focus": "The focus ring colour is mode-dependent and lives in each entry of colors.modes, surfaced as --focus / ring-focus. There is deliberately no colors.state.focus: a single global value would contradict the per-mode ones. Every value clears WCAG SC 1.4.11 (3:1) against both of its mode's surfaces, which validate.js enforces. Each is a step from the mode's own tone scale: highlight is kept where it clears the bar (Burgendy/Cream) but cannot be used on cream or ash grey, where it only reaches 2.5:1 and 2.1:1.";
   };
   readonly "primitives": {
     readonly "darkPlum": "#221C38";
@@ -213,7 +213,7 @@ export declare const colors: {
         readonly "harsh": "#F2F0E7";
         readonly "subtle": "#39344B";
       };
-      readonly "focus": "#7269A7";
+      readonly "focus": "#B7B8D9";
     };
     readonly "cream-burgendy": {
       readonly "id": "light-burgendy";
@@ -239,7 +239,7 @@ export declare const colors: {
         readonly "harsh": "#3D0E18";
         readonly "subtle": "#D4CDB3";
       };
-      readonly "focus": "#FF6A3D";
+      readonly "focus": "#983E53";
     };
     readonly "burgendy-cream": {
       readonly "id": "dark-burgendy";
@@ -291,7 +291,7 @@ export declare const colors: {
         readonly "harsh": "#511E29";
         readonly "subtle": "#919F9D";
       };
-      readonly "focus": "#FF6A3D";
+      readonly "focus": "#7F3546";
     };
   };
 };

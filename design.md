@@ -7,7 +7,7 @@ This document defines the visual DNA and non-negotiable rules for all Forte Advi
 Forte Advice uses a warm, sophisticated palette built around deep plums, soft creams, and rich burgundies. The brand communicates trust, strategic thinking, and Danish craftsmanship.
 
 - **Primary palette:** Dark Plum / Plum for depth, Cream for warmth
-- **Accent:** Highlight (#FF6A3D) — used sparingly for CTAs and focus states
+- **Accent:** Highlight (#FF6A3D) — used sparingly for CTAs, and for focus rings only on the dark burgundy surfaces where it clears 3:1
 - **Typography:** Geist — clean, modern, geometric sans-serif
 - **Icons:** Phosphor — consistent weight, versatile style
 
@@ -36,7 +36,9 @@ Additional modes for specific sections or campaigns:
 
 6. **Use Geist font only.** Load via Google Fonts. Never substitute with other fonts.
 
-7. **Highlight is for emphasis only.** Never use Highlight (#FF6A3D) as a surface/background color. It is reserved for focus states, accent CTAs, and the Burgendy/Cream mode text.
+7. **Highlight is for emphasis only.** Never use Highlight (#FF6A3D) as a surface/background color. It is reserved for accent CTAs and the Burgendy/Cream mode text.
+
+8. **Never pick a focus colour by hand.** Use `--focus` / `ring-focus`, which resolves per mode. Highlight is *not* the focus colour everywhere: on cream it reaches only 2.5:1 and on ash grey 2.1:1, against the 3:1 that WCAG SC 1.4.11 requires for focus indicators. Each mode's focus ring is a step from its own tone scale, chosen to clear 3:1 against both of that mode's surfaces, and `npm run validate` fails if one does not.
 
 ## Typography
 
@@ -77,7 +79,7 @@ Forte Advice buttons are **pill-shaped** (fully rounded). All buttons support an
 |-------|---------|-----------|-----------|
 | **Default** | Filled | Outlined | Underlined text |
 | **Hover** | `button-primary-hover` fill | `button-primary-hover` fill + `text-inverted` | No underline change |
-| **Focused** | Focus ring (`--focus`) | Focus ring (`--focus`) | Focus ring (`--focus`) |
+| **Focused** | Focus ring (`--focus`, per mode) | Focus ring (`--focus`, per mode) | Focus ring (`--focus`, per mode) |
 | **Pressed** | Same as hover | Same as hover | Same as hover |
 | **Disabled** | `button-disabled` fill, `text-disabled` | `button-disabled` border, `text-disabled` | `text-disabled`, no underline |
 

@@ -19,7 +19,7 @@ You are working on a project that uses the Forte Advice design system. Follow th
 3. **Default modes:** Light = Cream/Plum, Dark = Plum/Cream. Unless told otherwise, implement for these two.
 4. **Font:** Geist (sans) and Geist Mono (mono) for all web/digital products. Load from Google Fonts. Never substitute. **Exception:** PowerPoint templates use Aptos / Aptos Display (because Aptos ships with Microsoft 365).
 5. **Icons:** Phosphor only. Default weight: regular. Import from `@phosphor-icons/react`.
-6. **Highlight (#FF6A3D)** is accent only. Never use as a background surface.
+6. **Highlight (#FF6A3D)** is accent only. Never use as a background surface, and never as a focus ring — it fails WCAG 1.4.11 on cream and ash grey. Always use `ring-focus` / `var(--focus)`, which resolves per mode.
 7. **Mode switching** uses `data-theme` attribute: `cream-plum`, `plum-cream`, `cream-burgendy`, `burgendy-cream`, `grey`.
 
 ## Semantic Token Names (Tailwind classes)

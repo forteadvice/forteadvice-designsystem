@@ -1,6 +1,6 @@
 {
   "name": "@forteadvice/design-tokens",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Shared design tokens for all Forte Advice products",
   "type": "module",
   "main": "./dist/ts/tokens.js",

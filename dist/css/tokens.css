@@ -161,7 +161,7 @@
     --button-disabled: #39344B;
     --stroke-harsh: #F2F0E7;
     --stroke-subtle: #39344B;
-    --focus: #7269A7;
+    --focus: #B7B8D9;
   }
 }
 
@@ -196,7 +196,7 @@
   --button-disabled: #39344B;
   --stroke-harsh: #F2F0E7;
   --stroke-subtle: #39344B;
-  --focus: #7269A7;
+  --focus: #B7B8D9;
 }
 
 /* === data-theme modes — win over the class toggle above === */
@@ -233,7 +233,7 @@
   --button-disabled: #39344B;
   --stroke-harsh: #F2F0E7;
   --stroke-subtle: #39344B;
-  --focus: #7269A7;
+  --focus: #B7B8D9;
 }
 
 /* Cream / Burgendy */
@@ -251,7 +251,7 @@
   --button-disabled: #D4CDB3;
   --stroke-harsh: #3D0E18;
   --stroke-subtle: #D4CDB3;
-  --focus: #FF6A3D;
+  --focus: #983E53;
 }
 
 /* Burgendy / Cream */
@@ -287,5 +287,5 @@
   --button-disabled: #919F9D;
   --stroke-harsh: #511E29;
   --stroke-subtle: #919F9D;
-  --focus: #FF6A3D;
+  --focus: #7F3546;
 }

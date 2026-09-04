@@ -234,6 +234,25 @@ content — bump `meta.version` to publish a change.
 
 ## Breaking Changes
 
+### 0.7.0
+
+The focus ring colour changed in three modes, because the old values failed
+WCAG 2.1 SC 1.4.11 (3:1 for focus indicators):
+
+| Mode | Was | Now | Contrast on both surfaces |
+|------|-----|-----|---------------------------|
+| Plum / Cream | `#7269A7` | `#B7B8D9` | 2.43:1 → 6.15:1 |
+| Cream / Burgendy | `#FF6A3D` | `#983E53` | 2.32:1 → 5.44:1 |
+| Grey | `#FF6A3D` | `#7F3546` | 1.63:1 → 4.80:1 |
+
+Cream / Plum and Burgendy / Cream already passed and are unchanged. Each new
+value is a step from that mode's own tone scale — nothing new was added to the
+palette. Highlight is no longer the focus colour outside Burgendy / Cream: it
+cannot clear 3:1 on cream (2.5:1) or ash grey (2.1:1).
+
+Non-text contrast is now a **fatal** validation error rather than a warning, so
+a new mode cannot ship with an inaccessible focus ring.
+
 ### 0.6.0
 
 - `bg-state-errorForeground` is now `bg-state-error-foreground`. The v3 preset

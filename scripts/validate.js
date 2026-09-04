@@ -7,13 +7,15 @@
  *   1. Schema integrity (required fields, types)
  *   2. Color format validity (hex, rgba)
  *   3. WCAG 2.1 AA text contrast, >= 4.5:1 (fatal)
- *   4. WCAG 2.1 AA non-text contrast, >= 3:1 (reported, not fatal)
- *   5. Mode parity (all modes have same semantic keys)
+ *   4. WCAG 2.1 AA non-text contrast, >= 3:1 (fatal)
+ *   5. Non-colour tokens (type scale, radius, motion, dimensions)
+ *   6. Mode parity (all modes have same semantic keys)
  *
- * Text contrast is fatal because it is fully determined by the token values.
- * Non-text contrast is reported as a warning: the fixes are brand decisions
- * (picking a different focus hue per mode), not mechanical corrections, so
- * they must not block a release the moment someone adds a mode.
+ * Both contrast checks are fatal. Non-text contrast was a warning while the
+ * focus rings in three modes still failed it; now that every mode clears 3:1,
+ * making it fatal is what keeps them there. A new mode has to pick a focus
+ * colour that passes — the analysis is mechanical: at least 21 of the palette's
+ * 55 values clear the bar against any given pair of surfaces.
  */
 
 import { readFileSync } from "node:fs";
@@ -196,7 +198,7 @@ function validateTextContrast() {
 }
 
 // ---------------------------------------------------------------------------
-// 4. WCAG non-text contrast checks (reported, not fatal)
+// 4. WCAG non-text contrast checks (fatal)
 //
 // WCAG 2.1 SC 1.4.11 wants >= 3:1 for the visual boundary of UI components and
 // for focus indicators. stroke.subtle is intentionally excluded: it is used for
@@ -204,7 +206,7 @@ function validateTextContrast() {
 // ---------------------------------------------------------------------------
 
 function validateNonTextContrast() {
-  console.log(`\n4. WCAG 2.1 AA non-text contrast (SC 1.4.11, want >= ${AA_NON_TEXT}:1)`);
+  console.log(`\n4. WCAG 2.1 AA non-text contrast (SC 1.4.11, require >= ${AA_NON_TEXT}:1)`);
 
   for (const [, mode] of Object.entries(tokens.colors.modes)) {
     console.log(`\n   Mode: ${mode.label}`);
@@ -218,12 +220,12 @@ function validateNonTextContrast() {
     for (const [label, fg, bg] of checks) {
       const ratio = contrastRatio(fg, bg);
       if (ratio === null) {
-        warn(`${label}: cannot compute contrast (non-hex color ${fg} / ${bg})`);
+        error(`${label}: cannot compute contrast (non-hex color ${fg} / ${bg})`);
         continue;
       }
       const ratioStr = ratio.toFixed(2);
       if (ratio >= AA_NON_TEXT) ok(`${label}: ${ratioStr}:1`);
-      else warn(`${label}: ${ratioStr}:1 — FAILS SC 1.4.11 (${AA_NON_TEXT}:1)`);
+      else error(`${label}: ${ratioStr}:1 — below SC 1.4.11 (${AA_NON_TEXT}:1)`);
     }
   }
 }

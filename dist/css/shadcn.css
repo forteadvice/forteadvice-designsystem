@@ -73,7 +73,7 @@
       --destructive-foreground: #F2F0E7;
       --border: #39344B;
       --input: #39344B;
-      --ring: #7269A7;
+      --ring: #B7B8D9;
       --sidebar: #39344B;
       --sidebar-foreground: #F2F0E7;
       --sidebar-primary: #ECE8DA;
@@ -81,7 +81,7 @@
       --sidebar-border: #39344B;
       --sidebar-accent: #39344B;
       --sidebar-accent-foreground: #F2F0E7;
-      --sidebar-ring: #7269A7;
+      --sidebar-ring: #B7B8D9;
       --chart-1: #ECE8DA;
       --chart-2: #9595C5;
       --chart-3: #39344B;
@@ -148,7 +148,7 @@
     --destructive-foreground: #F2F0E7;
     --border: #39344B;
     --input: #39344B;
-    --ring: #7269A7;
+    --ring: #B7B8D9;
     --sidebar: #39344B;
     --sidebar-foreground: #F2F0E7;
     --sidebar-primary: #ECE8DA;
@@ -156,7 +156,7 @@
     --sidebar-border: #39344B;
     --sidebar-accent: #39344B;
     --sidebar-accent-foreground: #F2F0E7;
-    --sidebar-ring: #7269A7;
+    --sidebar-ring: #B7B8D9;
     --chart-1: #ECE8DA;
     --chart-2: #9595C5;
     --chart-3: #39344B;
@@ -225,7 +225,7 @@
     --destructive-foreground: #F2F0E7;
     --border: #39344B;
     --input: #39344B;
-    --ring: #7269A7;
+    --ring: #B7B8D9;
     --sidebar: #39344B;
     --sidebar-foreground: #F2F0E7;
     --sidebar-primary: #ECE8DA;
@@ -233,7 +233,7 @@
     --sidebar-border: #39344B;
     --sidebar-accent: #39344B;
     --sidebar-accent-foreground: #F2F0E7;
-    --sidebar-ring: #7269A7;
+    --sidebar-ring: #B7B8D9;
     --chart-1: #ECE8DA;
     --chart-2: #9595C5;
     --chart-3: #39344B;
@@ -263,7 +263,7 @@
     --destructive-foreground: #F2F0E7;
     --border: #D4CDB3;
     --input: #D4CDB3;
-    --ring: #FF6A3D;
+    --ring: #983E53;
     --sidebar: #ECE8DA;
     --sidebar-foreground: #3D0E18;
     --sidebar-primary: #511E29;
@@ -271,7 +271,7 @@
     --sidebar-border: #D4CDB3;
     --sidebar-accent: #ECE8DA;
     --sidebar-accent-foreground: #3D0E18;
-    --sidebar-ring: #FF6A3D;
+    --sidebar-ring: #983E53;
     --chart-1: #511E29;
     --chart-2: #82694C;
     --chart-3: #D4CDB3;
@@ -339,7 +339,7 @@
     --destructive-foreground: #F2F0E7;
     --border: #919F9D;
     --input: #919F9D;
-    --ring: #FF6A3D;
+    --ring: #7F3546;
     --sidebar: #BBC6C5;
     --sidebar-foreground: #3D0E18;
     --sidebar-primary: #511E29;
@@ -347,7 +347,7 @@
     --sidebar-border: #919F9D;
     --sidebar-accent: #BBC6C5;
     --sidebar-accent-foreground: #3D0E18;
-    --sidebar-ring: #FF6A3D;
+    --sidebar-ring: #7F3546;
     --chart-1: #511E29;
     --chart-2: #983E53;
     --chart-3: #919F9D;
