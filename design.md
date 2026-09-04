@@ -220,4 +220,10 @@ Apply a mode by setting `data-theme` on any parent element:
 </section>
 ```
 
-Dark mode (Plum/Cream) also activates automatically via `prefers-color-scheme: dark`.
+Dark mode (Plum/Cream) also activates automatically via `prefers-color-scheme: dark`,
+but only when no mode is pinned. A `.light` or `.dark` class (Tailwind
+`darkMode: "class"`, next-themes, shadcn) overrides the OS preference, and
+`data-theme` overrides both.
+
+Every mode also sets `color-scheme`, so native controls — scrollbars, selects,
+checkboxes, date pickers — match the mode.

@@ -52,6 +52,65 @@ function tsLiteralType(value, indent = 0) {
   return JSON.stringify(value);
 }
 
+/**
+ * Emits the mode cascade shared by tokens.css and shadcn.css. The order is
+ * deliberate:
+ *
+ *   1. :root carries the default light mode.
+ *   2. The auto-dark media query is scoped away from every explicit opt-in
+ *      (.light, .dark, [data-theme]). A media query adds no specificity, so an
+ *      unscoped :root here would tie with those and win on source order —
+ *      a pinned light theme would render dark on a dark-mode OS.
+ *   3. .light / .dark support Tailwind's darkMode: "class" and next-themes,
+ *      which is how shadcn projects toggle their theme.
+ *   4. [data-theme] comes last, so the design system's own five-mode switch
+ *      wins over the two-state class toggle when a project uses both.
+ */
+function modeCascade(modes, block) {
+  const out = [];
+  const light = modes["cream-plum"];
+  const dark = modes["plum-cream"];
+
+  out.push(`/* === Default: ${light.label} === */`);
+  out.push(":root {");
+  out.push(block(light));
+  out.push("}");
+  out.push("");
+
+  out.push(`/* === Auto dark: ${dark.label} — only when no theme is pinned === */`);
+  out.push("@media (prefers-color-scheme: dark) {");
+  out.push("  :root:not(.light):not(.dark):not([data-theme]) {");
+  out.push(block(dark).replace(/^  /gm, "    "));
+  out.push("  }");
+  out.push("}");
+  out.push("");
+
+  out.push('/* === Class toggle: Tailwind darkMode: "class" / next-themes === */');
+  out.push(".light {");
+  out.push(block(light));
+  out.push("}");
+  out.push(".dark {");
+  out.push(block(dark));
+  out.push("}");
+  out.push("");
+
+  out.push("/* === data-theme modes — win over the class toggle above === */");
+  for (const [key, mode] of Object.entries(modes)) {
+    out.push(`/* ${mode.label} */`);
+    out.push(`[data-theme="${key}"] {`);
+    out.push(block(mode));
+    out.push("}");
+    out.push("");
+  }
+
+  return out;
+}
+
+function indentLines(lines, pad) {
+  if (!pad) return lines;
+  return lines.map((line) => (line === "" ? "" : line.replace(/^/gm, pad)));
+}
+
 function write(relPath, content) {
   const abs = join(ROOT, relPath);
   ensureDir(abs);
@@ -107,6 +166,9 @@ function buildCSS() {
   function modeBlock(mode) {
     const out = [];
     const { surface, text, button, stroke, focus } = mode;
+    // Not a custom property: this is what tells the browser to render native
+    // scrollbars, selects, date pickers and form controls dark instead of light.
+    out.push(`  color-scheme: ${mode.colorScheme};`);
     out.push(`  --surface-primary: ${surface.primary};`);
     out.push(`  --surface-secondary: ${surface.secondary};`);
     out.push(`  --surface-opaque: ${surface.opaque};`);
@@ -123,39 +185,7 @@ function buildCSS() {
     return out.join("\n");
   }
 
-  // Default: cream-plum (light)
-  lines.push("/* === Default: Cream / Plum (light) === */");
-  lines.push(`:root, [data-theme="cream-plum"] {`);
-  lines.push(modeBlock(modes["cream-plum"]));
-  lines.push("}");
-  lines.push("");
-
-  // Dark: plum-cream (auto via media query)
-  //
-  // The auto-dark block is scoped to :root:not([data-theme]) on purpose. A media
-  // query adds no specificity, so a plain `:root` here would tie with
-  // [data-theme="cream-plum"] above and win on source order — meaning an
-  // explicitly forced light theme would render dark on a dark-mode OS.
-  lines.push("/* === Dark: Plum / Cream (auto + manual) === */");
-  lines.push("@media (prefers-color-scheme: dark) {");
-  lines.push("  :root:not([data-theme]) {");
-  lines.push(modeBlock(modes["plum-cream"]).replace(/^  /gm, "    "));
-  lines.push("  }");
-  lines.push("}");
-  lines.push(`[data-theme="plum-cream"] {`);
-  lines.push(modeBlock(modes["plum-cream"]));
-  lines.push("}");
-  lines.push("");
-
-  // Additional modes (manual only)
-  for (const [key, mode] of Object.entries(modes)) {
-    if (key === "cream-plum" || key === "plum-cream") continue;
-    lines.push(`/* === ${mode.label} === */`);
-    lines.push(`[data-theme="${key}"] {`);
-    lines.push(modeBlock(mode));
-    lines.push("}");
-    lines.push("");
-  }
+  lines.push(...modeCascade(modes, modeBlock));
 
   write("dist/css/tokens.css", lines.join("\n"));
 }
@@ -173,6 +203,11 @@ function buildShadcnCSS() {
   lines.push("   Forte Advice — shadcn/ui Theme (auto-generated)");
   lines.push("   DO NOT EDIT — regenerate with: npm run build");
   lines.push("");
+  lines.push("   Theme switching works three ways, in increasing precedence:");
+  lines.push("     - prefers-color-scheme, when nothing is pinned");
+  lines.push("     - .light / .dark, for Tailwind darkMode:\"class\" and next-themes");
+  lines.push("     - [data-theme=\"...\"], for all five Forte Advice modes");
+  lines.push("");
   lines.push("   Import this AFTER tokens.css in your project:");
   lines.push("   @import '@forteadvice/design-tokens/css';");
   lines.push("   @import '@forteadvice/design-tokens/shadcn';");
@@ -181,6 +216,7 @@ function buildShadcnCSS() {
 
   function shadcnBlock(mode) {
     const out = [];
+    out.push(`  color-scheme: ${mode.colorScheme};`);
     out.push(`  --background: ${mode.surface.primary};`);
     out.push(`  --foreground: ${mode.text.primary};`);
     out.push(`  --card: ${mode.surface.secondary};`);
@@ -196,6 +232,7 @@ function buildShadcnCSS() {
     out.push(`  --accent: ${mode.surface.secondary};`);
     out.push(`  --accent-foreground: ${mode.text.primary};`);
     out.push(`  --destructive: ${state.error};`);
+    out.push(`  --destructive-foreground: ${state.errorForeground};`);
     out.push(`  --border: ${mode.stroke.subtle};`);
     out.push(`  --input: ${mode.stroke.subtle};`);
     out.push(`  --ring: ${mode.focus};`);
@@ -216,30 +253,8 @@ function buildShadcnCSS() {
     return out.join("\n");
   }
 
-  // Default: cream-plum (light)
   lines.push("@layer base {");
-  lines.push("  :root {");
-  lines.push(shadcnBlock(modes["cream-plum"]));
-  lines.push("  }");
-  lines.push("");
-
-  // Dark: plum-cream — scoped like tokens.css so an explicit [data-theme]
-  // always wins over the OS preference, regardless of block order below.
-  lines.push("  @media (prefers-color-scheme: dark) {");
-  lines.push("    :root:not([data-theme]) {");
-  lines.push(shadcnBlock(modes["plum-cream"]).replace(/^  /gm, "      "));
-  lines.push("    }");
-  lines.push("  }");
-  lines.push("");
-
-  // Manual mode overrides
-  for (const [key, mode] of Object.entries(modes)) {
-    lines.push(`  [data-theme="${key}"] {`);
-    lines.push(shadcnBlock(mode));
-    lines.push("  }");
-    lines.push("");
-  }
-
+  lines.push(...indentLines(modeCascade(modes, shadcnBlock), "  "));
   lines.push("}");
 
   write("dist/css/shadcn.css", lines.join("\n"));

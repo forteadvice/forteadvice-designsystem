@@ -49,7 +49,9 @@ If using shadcn/ui, import the shadcn theme file instead of (or in addition to) 
 @import '@forteadvice/design-tokens/shadcn';
 ```
 
-All shadcn components will automatically use Forte Advice colors, including dark mode and all 5 themes.
+All shadcn components will automatically use Forte Advice colors, including dark
+mode and all 5 themes. The `.dark` class that shadcn and next-themes toggle is
+supported directly, so no extra configuration is needed.
 
 We also recommend installing the [shadcn/ui AI skill](https://ui.shadcn.com/docs/skills) so your AI assistant knows both the component library and the Forte Advice brand:
 
@@ -95,6 +97,23 @@ Switch modes by setting `data-theme` on any element:
 <!-- or scope it to a section -->
 <section data-theme="burgendy-cream">
 ```
+
+### Precedence
+
+Three mechanisms are supported, in increasing precedence:
+
+| Mechanism | Applies |
+|-----------|---------|
+| `prefers-color-scheme` | Only when nothing else is pinned |
+| `.light` / `.dark` class | Tailwind `darkMode: "class"`, next-themes, shadcn |
+| `data-theme="..."` | All five modes — wins over the class toggle |
+
+So a project already toggling `.dark` with next-themes works without changes, and
+a pinned theme is never overridden by the OS preference.
+
+Each mode also sets the CSS `color-scheme` property, so native scrollbars,
+selects, checkboxes and date pickers follow the mode instead of always rendering
+light.
 
 ## Usage Examples
 
@@ -172,6 +191,16 @@ tags are never moved, so a pinned `#vX.Y.Z` install always resolves to the same
 content — bump `meta.version` to publish a change.
 
 ## Breaking Changes
+
+### 0.5.0
+
+Additive, with one visible change: every mode now emits the CSS `color-scheme`
+property. Native controls and default scrollbars will render dark in the dark
+modes instead of light. If you had worked around the old behaviour with custom
+scrollbar styling, remove it.
+
+New tokens: `colors.state.errorForeground` (shadcn `--destructive-foreground`)
+and a `colorScheme` field on every mode.
 
 ### 0.4.0
 

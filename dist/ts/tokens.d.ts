@@ -3,7 +3,7 @@
 
 export declare const meta: {
   readonly "name": "Forte Advice Design System";
-  readonly "version": "0.4.0";
+  readonly "version": "0.5.0";
   readonly "updated": "2026-09-05";
 };
 
@@ -34,6 +34,8 @@ export declare const icons: {
 
 export declare const colors: {
   readonly "notes": {
+    readonly "colorScheme": "Each mode declares colorScheme so the generated CSS can emit the color-scheme property. Without it, native scrollbars, selects and date pickers stay light on a dark surface.";
+    readonly "errorForeground": "Text/icon colour for content sitting on state.error (shadcn --destructive-foreground). It is cream rather than the per-mode text.inverted, because text.inverted is dark plum in the dark modes and would be unreadable on the error red.";
     readonly "focus": "The focus ring colour is mode-dependent and lives in each entry of colors.modes, surfaced as --focus / ring-focus. There is deliberately no colors.state.focus: a single global value would contradict the per-mode ones.";
   };
   readonly "primitives": {
@@ -107,10 +109,12 @@ export declare const colors: {
     readonly "error": "#9D140F";
     readonly "warning": "#CBAE54";
     readonly "success": "#518579";
+    readonly "errorForeground": "#F2F0E7";
   };
   readonly "modes": {
     readonly "cream-plum": {
       readonly "id": "light";
+      readonly "colorScheme": "light";
       readonly "label": "Cream / Plum";
       readonly "surface": {
         readonly "primary": "#F2F0E7";
@@ -136,6 +140,7 @@ export declare const colors: {
     };
     readonly "plum-cream": {
       readonly "id": "dark";
+      readonly "colorScheme": "dark";
       readonly "label": "Plum / Cream";
       readonly "surface": {
         readonly "primary": "#221C38";
@@ -161,6 +166,7 @@ export declare const colors: {
     };
     readonly "cream-burgendy": {
       readonly "id": "light-burgendy";
+      readonly "colorScheme": "light";
       readonly "label": "Cream / Burgendy";
       readonly "surface": {
         readonly "primary": "#F2F0E7";
@@ -186,6 +192,7 @@ export declare const colors: {
     };
     readonly "burgendy-cream": {
       readonly "id": "dark-burgendy";
+      readonly "colorScheme": "dark";
       readonly "label": "Burgendy / Cream";
       readonly "surface": {
         readonly "primary": "#3D0E18";
@@ -211,6 +218,7 @@ export declare const colors: {
     };
     readonly "grey": {
       readonly "id": "grey";
+      readonly "colorScheme": "light";
       readonly "label": "Grey";
       readonly "surface": {
         readonly "primary": "#D6DDDC";

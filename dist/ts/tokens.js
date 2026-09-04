@@ -3,7 +3,7 @@
 
 export const meta = {
   "name": "Forte Advice Design System",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "updated": "2026-09-05"
 };
 
@@ -46,6 +46,8 @@ export const icons = {
 
 export const colors = {
   "notes": {
+    "colorScheme": "Each mode declares colorScheme so the generated CSS can emit the color-scheme property. Without it, native scrollbars, selects and date pickers stay light on a dark surface.",
+    "errorForeground": "Text/icon colour for content sitting on state.error (shadcn --destructive-foreground). It is cream rather than the per-mode text.inverted, because text.inverted is dark plum in the dark modes and would be unreadable on the error red.",
     "focus": "The focus ring colour is mode-dependent and lives in each entry of colors.modes, surfaced as --focus / ring-focus. There is deliberately no colors.state.focus: a single global value would contradict the per-mode ones."
   },
   "primitives": {
@@ -118,11 +120,13 @@ export const colors = {
   "state": {
     "error": "#9D140F",
     "warning": "#CBAE54",
-    "success": "#518579"
+    "success": "#518579",
+    "errorForeground": "#F2F0E7"
   },
   "modes": {
     "cream-plum": {
       "id": "light",
+      "colorScheme": "light",
       "label": "Cream / Plum",
       "surface": {
         "primary": "#F2F0E7",
@@ -148,6 +152,7 @@ export const colors = {
     },
     "plum-cream": {
       "id": "dark",
+      "colorScheme": "dark",
       "label": "Plum / Cream",
       "surface": {
         "primary": "#221C38",
@@ -173,6 +178,7 @@ export const colors = {
     },
     "cream-burgendy": {
       "id": "light-burgendy",
+      "colorScheme": "light",
       "label": "Cream / Burgendy",
       "surface": {
         "primary": "#F2F0E7",
@@ -198,6 +204,7 @@ export const colors = {
     },
     "burgendy-cream": {
       "id": "dark-burgendy",
+      "colorScheme": "dark",
       "label": "Burgendy / Cream",
       "surface": {
         "primary": "#3D0E18",
@@ -223,6 +230,7 @@ export const colors = {
     },
     "grey": {
       "id": "grey",
+      "colorScheme": "light",
       "label": "Grey",
       "surface": {
         "primary": "#D6DDDC",

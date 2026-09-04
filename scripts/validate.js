@@ -112,8 +112,18 @@ function validateSchema() {
 
   // Colors
   if (!tokens.colors?.primitives) error("colors.primitives is required");
+  if (!tokens.colors?.state?.errorForeground)
+    error("colors.state.errorForeground is required (shadcn --destructive-foreground)");
   if (!tokens.colors?.modes) error("colors.modes is required");
   else ok(`colors: ${Object.keys(tokens.colors.modes).length} modes defined`);
+
+  // Drives the generated `color-scheme` property, so it must be one of the two
+  // values the CSS keyword accepts — anything else silently does nothing.
+  for (const [modeName, mode] of Object.entries(tokens.colors.modes ?? {})) {
+    if (!mode.colorScheme) error(`${modeName} is missing colorScheme`);
+    else if (mode.colorScheme !== "light" && mode.colorScheme !== "dark")
+      error(`${modeName} colorScheme must be "light" or "dark", got "${mode.colorScheme}"`);
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -150,6 +160,17 @@ const AA_NON_TEXT = 3.0;
 
 function validateTextContrast() {
   console.log(`\n3. WCAG 2.1 AA text contrast (require >= ${AA_TEXT}:1)`);
+
+  // Mode-independent: state colors are the same in every mode.
+  console.log("\n   State colors");
+  const stateRatio = contrastRatio(tokens.colors.state.errorForeground, tokens.colors.state.error);
+  if (stateRatio === null) error("state.errorForeground on state.error: cannot compute contrast");
+  else if (stateRatio >= AA_TEXT)
+    ok(`state.errorForeground on state.error: ${stateRatio.toFixed(2)}:1`);
+  else
+    error(
+      `state.errorForeground on state.error: ${stateRatio.toFixed(2)}:1 — below AA ${AA_TEXT}:1`
+    );
 
   for (const [, mode] of Object.entries(tokens.colors.modes)) {
     console.log(`\n   Mode: ${mode.label}`);
