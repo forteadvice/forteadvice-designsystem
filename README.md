@@ -148,6 +148,10 @@ npm run validate:pptx
 
 ## Development
 
+Every pull request runs `validate`, `validate:pptx` and `build` in CI, and fails
+if `dist/` is not in sync with `tokens.json` — so run `npm run build` before
+pushing.
+
 ```bash
 # Validate tokens (schema + WCAG contrast)
 npm run validate
@@ -166,6 +170,16 @@ npm run build
 Tags are only created for a version that has not been released before. Existing
 tags are never moved, so a pinned `#vX.Y.Z` install always resolves to the same
 content — bump `meta.version` to publish a change.
+
+## Breaking Changes
+
+### 0.4.0
+
+- `--color-habour-mist` is now `--color-harbour-mist` (Tailwind: `brand.habour-mist`
+  → `brand.harbour-mist`). The tone scale was already spelled `harbourMist`; the
+  primitive now matches it.
+- `--color-focus` has been removed. The focus ring is mode-dependent, so use the
+  semantic `--focus` (Tailwind: `ring-focus`), which resolves per `data-theme`.
 
 ## Architecture
 

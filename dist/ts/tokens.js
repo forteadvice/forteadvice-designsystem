@@ -3,8 +3,8 @@
 
 export const meta = {
   "name": "Forte Advice Design System",
-  "version": "0.3.0",
-  "updated": "2026-06-10"
+  "version": "0.4.0",
+  "updated": "2026-09-05"
 };
 
 export const typography = {
@@ -45,10 +45,13 @@ export const icons = {
 };
 
 export const colors = {
+  "notes": {
+    "focus": "The focus ring colour is mode-dependent and lives in each entry of colors.modes, surfaced as --focus / ring-focus. There is deliberately no colors.state.focus: a single global value would contradict the per-mode ones."
+  },
   "primitives": {
     "darkPlum": "#221C38",
     "plum": "#39344B",
-    "habourMist": "#BBC6C5",
+    "harbourMist": "#BBC6C5",
     "ashGrey": "#D6DDDC",
     "cream": "#F2F0E7",
     "cookieDough": "#EDE6C3",
@@ -115,8 +118,7 @@ export const colors = {
   "state": {
     "error": "#9D140F",
     "warning": "#CBAE54",
-    "success": "#518579",
-    "focus": "#FF6A3D"
+    "success": "#518579"
   },
   "modes": {
     "cream-plum": {

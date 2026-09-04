@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Validate tokens
+        run: node scripts/validate.js
+
+      - name: Validate PowerPoint templates
+        run: python3 scripts/validate-pptx.py
+
+      - name: Build tokens
+        run: node scripts/build.js
+
+      # main gets dist/ regenerated and auto-committed by build-tokens.yml, but
+      # that happens after the fact — GitHub Pages can serve stale CSS in the
+      # meantime. Requiring dist/ to be in sync on the PR keeps main correct at
+      # every commit.
+      - name: Fail if dist/ is out of sync with tokens.json
+        run: |
+          if ! git diff --exit-code dist/; then
+            echo "::error::dist/ is stale. Run 'npm run build' and commit the result."
+            exit 1
+          fi

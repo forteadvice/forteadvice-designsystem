@@ -7,7 +7,7 @@
   /* Brand primitives */
   --color-dark-plum: #221C38;
   --color-plum: #39344B;
-  --color-habour-mist: #BBC6C5;
+  --color-harbour-mist: #BBC6C5;
   --color-ash-grey: #D6DDDC;
   --color-cream: #F2F0E7;
   --color-cookie-dough: #EDE6C3;
@@ -67,7 +67,6 @@
   --color-error: #9D140F;
   --color-warning: #CBAE54;
   --color-success: #518579;
-  --color-focus: #FF6A3D;
 
   /* Typography */
   --font-sans: 'Geist', system-ui, sans-serif;

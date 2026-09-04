@@ -6,8 +6,14 @@
  * Checks:
  *   1. Schema integrity (required fields, types)
  *   2. Color format validity (hex, rgba)
- *   3. WCAG 2.1 AA contrast ratios (text on surface, button)
- *   4. Mode parity (all modes have same semantic keys)
+ *   3. WCAG 2.1 AA text contrast, >= 4.5:1 (fatal)
+ *   4. WCAG 2.1 AA non-text contrast, >= 3:1 (reported, not fatal)
+ *   5. Mode parity (all modes have same semantic keys)
+ *
+ * Text contrast is fatal because it is fully determined by the token values.
+ * Non-text contrast is reported as a warning: the fixes are brand decisions
+ * (picking a different focus hue per mode), not mechanical corrections, so
+ * they must not block a release the moment someone adds a mode.
  */
 
 import { readFileSync } from "node:fs";
@@ -89,6 +95,15 @@ function validateSchema() {
   if (!tokens.meta?.updated) error("meta.updated is required");
   else ok(`meta: v${tokens.meta.version} (${tokens.meta.updated})`);
 
+  // CI tags releases from meta.version while npm consumers read package.json;
+  // if the two drift, a published tag and its package version disagree.
+  const pkg = JSON.parse(readFileSync(join(ROOT, "package.json"), "utf-8"));
+  if (pkg.version !== tokens.meta.version)
+    error(
+      `package.json version "${pkg.version}" does not match meta.version "${tokens.meta.version}"`
+    );
+  else ok(`package.json version matches meta.version`);
+
   // Brand
   if (!tokens.brand?.typography?.fontFamily?.sans)
     error("brand.typography.fontFamily.sans is required");
@@ -127,13 +142,16 @@ function validateColorFormats() {
 }
 
 // ---------------------------------------------------------------------------
-// 3. WCAG contrast checks
+// 3. WCAG text contrast checks (fatal below 4.5:1)
 // ---------------------------------------------------------------------------
 
-function validateContrast() {
-  console.log("\n3. WCAG 2.1 AA contrast checks (target ≥ 4.5:1)");
+const AA_TEXT = 4.5;
+const AA_NON_TEXT = 3.0;
 
-  for (const [modeName, mode] of Object.entries(tokens.colors.modes)) {
+function validateTextContrast() {
+  console.log(`\n3. WCAG 2.1 AA text contrast (require >= ${AA_TEXT}:1)`);
+
+  for (const [, mode] of Object.entries(tokens.colors.modes)) {
     console.log(`\n   Mode: ${mode.label}`);
 
     const checks = [
@@ -146,27 +164,55 @@ function validateContrast() {
     for (const [label, fg, bg] of checks) {
       const ratio = contrastRatio(fg, bg);
       if (ratio === null) {
-        warn(`${label}: cannot compute (non-hex color)`);
+        error(`${label}: cannot compute contrast (non-hex color ${fg} / ${bg})`);
         continue;
       }
       const ratioStr = ratio.toFixed(2);
-      if (ratio >= 4.5) {
-        ok(`${label}: ${ratioStr}:1`);
-      } else if (ratio >= 3.0) {
-        warn(`${label}: ${ratioStr}:1 (AA-large only, below 4.5)`);
-      } else {
-        warn(`${label}: ${ratioStr}:1 (FAILS AA)`);
-      }
+      if (ratio >= AA_TEXT) ok(`${label}: ${ratioStr}:1`);
+      else error(`${label}: ${ratioStr}:1 — below AA ${AA_TEXT}:1`);
     }
   }
 }
 
 // ---------------------------------------------------------------------------
-// 4. Mode parity check
+// 4. WCAG non-text contrast checks (reported, not fatal)
+//
+// WCAG 2.1 SC 1.4.11 wants >= 3:1 for the visual boundary of UI components and
+// for focus indicators. stroke.subtle is intentionally excluded: it is used for
+// decorative dividers, which the criterion does not cover.
+// ---------------------------------------------------------------------------
+
+function validateNonTextContrast() {
+  console.log(`\n4. WCAG 2.1 AA non-text contrast (SC 1.4.11, want >= ${AA_NON_TEXT}:1)`);
+
+  for (const [, mode] of Object.entries(tokens.colors.modes)) {
+    console.log(`\n   Mode: ${mode.label}`);
+
+    const checks = [
+      ["focus ring on surface.primary", mode.focus, mode.surface.primary],
+      ["focus ring on surface.secondary", mode.focus, mode.surface.secondary],
+      ["stroke.harsh on surface.primary", mode.stroke.harsh, mode.surface.primary],
+    ];
+
+    for (const [label, fg, bg] of checks) {
+      const ratio = contrastRatio(fg, bg);
+      if (ratio === null) {
+        warn(`${label}: cannot compute contrast (non-hex color ${fg} / ${bg})`);
+        continue;
+      }
+      const ratioStr = ratio.toFixed(2);
+      if (ratio >= AA_NON_TEXT) ok(`${label}: ${ratioStr}:1`);
+      else warn(`${label}: ${ratioStr}:1 — FAILS SC 1.4.11 (${AA_NON_TEXT}:1)`);
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 5. Mode parity check
 // ---------------------------------------------------------------------------
 
 function validateModeParity() {
-  console.log("\n4. Mode parity check");
+  console.log("\n5. Mode parity check");
 
   const modeEntries = Object.entries(tokens.colors.modes);
   if (modeEntries.length === 0) {
@@ -190,16 +236,25 @@ function validateModeParity() {
 
   const [refName, refMode] = modeEntries[0];
   const refKeys = getKeys(refMode);
+  let parityErrors = 0;
 
   for (const [modeName, mode] of modeEntries.slice(1)) {
     const modeKeys = getKeys(mode);
     const missing = refKeys.filter((k) => !modeKeys.includes(k));
     const extra = modeKeys.filter((k) => !refKeys.includes(k));
-    if (missing.length) error(`${modeName} is missing keys: ${missing.join(", ")}`);
-    if (extra.length) error(`${modeName} has extra keys: ${extra.join(", ")}`);
+    if (missing.length) {
+      error(`${modeName} is missing keys: ${missing.join(", ")}`);
+      parityErrors++;
+    }
+    if (extra.length) {
+      error(`${modeName} has extra keys: ${extra.join(", ")}`);
+      parityErrors++;
+    }
   }
 
-  if (errors === 0) ok(`All ${modeEntries.length} modes have identical semantic keys`);
+  // Scoped to this check: a failure elsewhere must not silence the parity result.
+  if (parityErrors === 0)
+    ok(`All ${modeEntries.length} modes have identical semantic keys (reference: ${refName})`);
 }
 
 // ---------------------------------------------------------------------------
@@ -209,7 +264,8 @@ function validateModeParity() {
 console.log("Validating Forte Advice design tokens...");
 validateSchema();
 validateColorFormats();
-validateContrast();
+validateTextContrast();
+validateNonTextContrast();
 validateModeParity();
 
 console.log(`\n${"─".repeat(50)}`);

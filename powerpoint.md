@@ -27,7 +27,7 @@ The Office theme color slots map to design tokens as follows (source of truth: `
 | accent3 | `#511E29` | burgendy |
 | accent4 | `#F2F0E7` | cream |
 | accent5 | `#751B2F` | wine |
-| accent6 | `#BBC6C5` | habourMist |
+| accent6 | `#BBC6C5` | harbourMist |
 
 ## Layout Reference
 

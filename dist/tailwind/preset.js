@@ -29,7 +29,7 @@ export default {
         "brand": {
           "dark-plum": "#221C38",
           "plum": "#39344B",
-          "habour-mist": "#BBC6C5",
+          "harbour-mist": "#BBC6C5",
           "ash-grey": "#D6DDDC",
           "cream": "#F2F0E7",
           "cookie-dough": "#EDE6C3",
@@ -42,8 +42,7 @@ export default {
         "state": {
           "error": "#9D140F",
           "warning": "#CBAE54",
-          "success": "#518579",
-          "focus": "#FF6A3D"
+          "success": "#518579"
         },
         "harbour-mist": {
           "50": "#F7F8F8",
