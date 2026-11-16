@@ -3,8 +3,8 @@
 
 export declare const meta: {
   readonly "name": "Forte Advice Design System";
-  readonly "version": "0.7.0";
-  readonly "updated": "2026-09-05";
+  readonly "version": "0.7.1";
+  readonly "updated": "2026-11-16";
 };
 
 export declare const typography: {

@@ -3,8 +3,8 @@
 
 export const meta = {
   "name": "Forte Advice Design System",
-  "version": "0.7.0",
-  "updated": "2026-09-05"
+  "version": "0.7.1",
+  "updated": "2026-11-16"
 };
 
 export const typography = {
