@@ -190,11 +190,21 @@ Both templates share the same theme and 65 named slide layouts. See [powerpoint.
 
 Placeholder images have been stripped from the templates — replace with your own visuals when building decks.
 
-The templates' theme colors and fonts are validated against `tokens.json` in CI:
+Decks are built by duplicating the templates' example slides, not by
+instantiating bare layouts — the example slides carry constructions the layouts
+do not, such as the agenda's 8×2 table with divider lines. [powerpoint.md](powerpoint.md#building-a-deck)
+has the full workflow.
+
+Validate the templates, or any deck you have built, against `tokens.json`:
 
 ```bash
-npm run validate:pptx
+npm run validate:pptx                   # the templates (also runs in CI)
+npm run validate:pptx -- my-deck.pptx   # a deck you have built
 ```
+
+This goes beyond the theme: it fails on any slide that hardcodes a non-Aptos
+font or an off-palette colour, which is the common way a deck drifts off brand
+after content is pasted in.
 
 ## Documentation
 
