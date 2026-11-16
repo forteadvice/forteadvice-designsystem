@@ -14,6 +14,9 @@ Checks, in both modes:
   4. No slide hardcodes a Latin font other than the theme fonts (rule 4)
   5. No slide hardcodes a colour outside the brand palette (rule 5)
 
+Deck mode additionally checks:
+  7. No slide still carries the template's filler text
+
 Template mode additionally checks:
   6. Slide position == slideN.xml filename, so the example-slide index in
      powerpoint.md can be used directly as filenames when building a deck
@@ -173,6 +176,89 @@ def check_slides(z, allowed_fonts, allowed_colors):
 
 
 # ---------------------------------------------------------------------------
+# 7. Leftover template filler (decks only)
+#
+# The templates' example slides carry 158 distinct filler strings, and a lot of
+# that text sits outside placeholders: 21 of the 33 non-placeholder text boxes
+# are inside group shapes (the case cards on IMAGE: Four images and
+# FOCUS x 4: Images), where OOXML does not allow placeholders at all, and 7 more
+# are on BLANK: Burgundy, whose layout has no content placeholders to use. So an
+# agent that dutifully fills slide.placeholders[idx] and stops will ship
+# "Name Namesen" and "Caborepe porum exerume" in the finished deck. This is the
+# check that catches that.
+#
+# It matches filler vocabulary rather than the template's exact strings, on
+# purpose. The templates also contain real client names — Metro, Flokk,
+# Hus Forbi, Hærvejen — and a deck about Metro should not fail for saying Metro.
+# ---------------------------------------------------------------------------
+
+FILLER_WORDS = re.compile(
+    r"""(?ix)(
+    lorem|ipsum|dolor|consectetur|adipiscing|donec|mauris|pharetra|dapibus|turpis|
+    ullamcorper|rhoncus|nibh|facilisis|caborepe|porum|exerume|nobitio|nsequos|
+    dellat|duntese|aspit|modignit|vollore|venditatur|sequasped|volorep|erspero|
+    vidundic|quodignim|cuptasp|icabore|hendis|dipsam|cullania|eicae|moloriam|
+    voluptio|voluptatume|fugiae|volorestis|evenditati|restect|incitae|molla|
+    expliqu|aepella|boribus|consed|consequi|namesen|quisquis|dolupta|quatem|
+    doluptati|iuntibus|nihita|incidunct|risus\s*enim|sit\s*amet
+    )"""
+)
+
+FILLER_STUBS = re.compile(
+    r"""(?ix)^(
+    title(\s*\d+)?|titel|subtitle|client\s*name\s*/\s*project\s*name|category\s*tag|
+    (first|second|third|fourth|fifth|sixth|seventh|eighth)\s+agenda|
+    insert\s+short\s+one\s+liner.*|
+    .*direct\s+quotation\s+or\s+data\s+value.*
+    )$"""
+)
+
+# Footer, date and slide-number placeholders are template furniture, not content
+# anyone is expected to rewrite.
+FURNITURE = {"sldNum", "dt", "ftr"}
+
+
+def check_leftover_filler(z):
+    slides = sorted(
+        (n for n in z.namelist() if SLIDE_RE.match(n)),
+        key=lambda n: int(SLIDE_RE.match(n).group(1)),
+    )
+
+    found = {}  # slide number -> [text, ...]
+    for name in slides:
+        num = int(SLIDE_RE.match(name).group(1))
+        root = ET.fromstring(z.read(name))
+
+        # Every paragraph on the slide, not just the ones directly inside a
+        # p:sp — the agenda is an a:tbl inside a p:graphicFrame, and the case
+        # cards are p:sp nested in p:grpSp. Both hold text that must be replaced.
+        furniture_paras = set()
+        for sp in root.iter(f"{P}sp"):
+            ph = sp.find(f"{P}nvSpPr/{P}nvPr/{P}ph")
+            if ph is not None and ph.get("type") in FURNITURE:
+                furniture_paras.update(id(para) for para in sp.iter(f"{A}p"))
+
+        for para in root.iter(f"{A}p"):
+            if id(para) in furniture_paras:
+                continue
+            text = "".join(t.text or "" for t in para.iter(f"{A}t")).strip()
+            if not text:
+                continue
+            if FILLER_WORDS.search(text) or FILLER_STUBS.match(text):
+                found.setdefault(num, []).append(text)
+
+    if not found:
+        ok(f"{len(slides)} slides carry no leftover template text")
+        return
+
+    for num in sorted(found):
+        texts = found[num]
+        shown = "; ".join(f'"{t[:48]}"' for t in texts[:3])
+        more = f" (+{len(texts) - 3} more)" if len(texts) > 3 else ""
+        error(f"slide {num} still has template filler text: {shown}{more}")
+
+
+# ---------------------------------------------------------------------------
 # 6. Slide position == filename (templates only)
 # ---------------------------------------------------------------------------
 
@@ -239,7 +325,11 @@ def validate(path, tokens, is_template):
             check_theme(z, ppt["theme"], ppt["fonts"])
             check_slides(z, allowed_fonts, allowed_colors)
             if is_template:
+                # The templates are filler by design — that is what makes them
+                # templates — so only a derived deck is checked for it.
                 check_slide_order(z)
+            else:
+                check_leftover_filler(z)
     except zipfile.BadZipFile:
         error(f"{display} is not a valid .pptx (bad zip)")
 

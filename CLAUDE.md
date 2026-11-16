@@ -16,7 +16,7 @@ In both cases: **all design decisions live in `tokens.json`. Never invent colors
 1. **Always start from a template** in `assets/powerpoint/` (default: `forte-advice-template-01.pptx`). Never build a deck from a blank file.
 2. **Duplicate example slides — don't instantiate bare layouts.** The example slides carry constructions the bare layouts do not: the agenda is an 8×2 table with divider lines, image arrangements are pre-built, slide numbers are instantiated. `add_slide(layout)` gives you empty placeholders instead and the table is simply gone.
 3. **Select layouts by their exact names** (e.g. `TITLE: Plum`, `QUOTE: Burgundy`, `FOCUS x 3: Numbers`) — the full inventory of 65 is in `powerpoint.md`.
-4. **Fill the layout's placeholders — never add free-floating text boxes.** Placeholder indices per layout are in powerpoint.md's appendix.
+4. **Fill the layout's placeholders**, and also replace the text the template keeps *outside* them. Placeholder indices per layout are in powerpoint.md's appendix; the off-placeholder text — group shapes, table cells, `BLANK:` layouts — is listed in its "Text Outside Placeholders" table. Filling only `slide.placeholders[idx]` ships `Name Namesen` and `Caborepe porum exerume` to the client.
 5. **Fonts: Aptos Display (headings) / Aptos (body).** Never Geist in PowerPoint. Leave runs on the theme font (`+mn-lt` / `+mj-lt`) rather than naming a font.
 6. **Colors: theme slots only.** The slot→token mapping lives in `powerpoint.theme` in `tokens.json`. Never hardcode hex outside that palette.
 7. **Validate before you hand it over:** `npm run validate:pptx -- your-deck.pptx`.
